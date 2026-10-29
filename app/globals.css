@@ -3,11 +3,14 @@
 /* ─── Fabrico Design Tokens ─── */
 
 :root {
-  --background: #09090b;
-  --foreground: #f4f4f5;
+  --background: #f2f3ef;
+  --foreground: #1c211e;
 
-  --accent: #6366f1;
-  --accent-hover: #4f46e5;
+  --accent: #2855f5;
+  --accent-hover: #1943d8;
+  --muted: #656d68;
+  --surface: #e8ebe5;
+  --line: #d9ded5;
 }
 
 @theme inline {
@@ -16,8 +19,9 @@
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
 
-  --font-display: var(--font-playfair);
-  --font-body: var(--font-dm-sans);
+  --font-display: var(--font-studio-display);
+  --font-body: var(--font-studio-body);
+  --font-sans: var(--font-studio-body);
 }
 
 /* ─── Base Styles ─── */
@@ -41,18 +45,26 @@ body {
   line-height: 1.6;
 }
 
+.skip-link { position: fixed; left: 16px; top: -100px; z-index: 100; border-radius: 8px; background: var(--accent); color: white; padding: 12px 18px; }
+.skip-link:focus { top: 12px; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+
 /* ─── Selection ─── */
 
 ::selection {
-  background-color: #6366f1;
+  background-color: #2855f5;
   color: #ffffff;
 }
 
 /* ─── Focus Styles ─── */
 
 :focus-visible {
-  outline: 2px solid #6366f1;
-  outline-offset: 2px;
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
 }
 
 /* ─── Scrollbar ─── */
@@ -79,7 +91,7 @@ body {
 :root {
   --duration-exit: 150ms;
   --duration-enter: 210ms;
-  --duration-move: 400ms;
+  --duration-move: 300ms;
 }
 
 @keyframes fade {

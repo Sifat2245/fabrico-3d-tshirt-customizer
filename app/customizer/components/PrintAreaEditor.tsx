@@ -273,7 +273,7 @@ export default function PrintAreaEditor({
     <div className="space-y-3 pt-3 border-t border-zinc-150" ref={containerRef}>
       {/* Visual Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+        <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-zinc-600">
           <Target className="w-3.5 h-3.5 text-zinc-500" />
           <span>2D Print Area Guide</span>
         </div>

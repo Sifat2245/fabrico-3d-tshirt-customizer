@@ -1,8 +1,8 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import * as THREE from 'three';
-import { CustomizerState, EraserPath } from '../app/customizer/components/types';
+import { CustomizerState, EraserPath, TextLayer } from '../app/customizer/components/types';
 
 const CANVAS_SIZE = 1024;
 
@@ -22,7 +22,7 @@ function getFontString(size: number, fontStyle: string, fontWeight: string | num
   return `${fontWeight} ${size}px "${fontStyle}", sans-serif`;
 }
 
-function drawTextLayer(ctx: CanvasRenderingContext2D, layer: any) {
+function drawTextLayer(ctx: CanvasRenderingContext2D, layer: TextLayer) {
   const isOutline = layer.font === 'Outline';
   const isNeon = layer.font === 'Neon Glow';
   const weight = layer.fontWeight || '700';
@@ -319,7 +319,19 @@ export function useJerseyTextures(state: CustomizerState): {
   trimFrontTex: THREE.CanvasTexture | null;
   trimBackTex: THREE.CanvasTexture | null;
 } {
-  return useMemo(() => {
+  const [fontRevision, setFontRevision] = useState(0);
+  const fontFamilies = [...new Set(state.textLayers.map((layer) => layer.font))].join('|');
+
+  useEffect(() => {
+    if (!fontFamilies) return;
+    let active = true;
+    Promise.all(fontFamilies.split('|').map((family) => document.fonts.load(`700 110px "${family}"`)))
+      .then(() => { if (active) setFontRevision((revision) => revision + 1); })
+      .catch(() => { /* The canvas keeps its system fallback if a font is unavailable. */ });
+    return () => { active = false; };
+  }, [fontFamilies]);
+
+  const textures = useMemo(() => {
     if (typeof window === 'undefined') {
       return { frontTex: null, backTex: null, trimFrontTex: null, trimBackTex: null };
     }
@@ -434,5 +446,12 @@ export function useJerseyTextures(state: CustomizerState): {
     state.loadedPatterns,
     state.textLayers, state.logoLayers, state.layersOrder,
     state.loadedLogoImages,
+    fontRevision,
   ]);
+
+  useEffect(() => () => {
+    Object.values(textures).forEach((texture) => texture?.dispose());
+  }, [textures]);
+
+  return textures;
 }

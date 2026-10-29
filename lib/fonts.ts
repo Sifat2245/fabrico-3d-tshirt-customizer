@@ -1,15 +1,13 @@
-import { Playfair_Display, DM_Sans } from "next/font/google";
+import localFont from "next/font/local";
 
-export const playfairDisplay = Playfair_Display({
-  subsets: ["latin"],
-  variable: "--font-playfair",
+export const studioDisplay = localFont({
+  src: "../public/fonts/Oswald/Oswald-VariableFont_wght.ttf",
+  variable: "--font-studio-display",
   display: "swap",
-  weight: ["400", "500", "600", "700"],
 });
 
-export const dmSans = DM_Sans({
-  subsets: ["latin"],
-  variable: "--font-dm-sans",
+export const studioBody = localFont({
+  src: "../public/fonts/Saira/Saira-VariableFont_wdth,wght.ttf",
+  variable: "--font-studio-body",
   display: "swap",
-  weight: ["300", "400", "500", "600", "700"],
 });

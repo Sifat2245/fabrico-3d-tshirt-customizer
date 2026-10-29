@@ -95,20 +95,20 @@ export default function PatternsSettings({ state, onUpdate, preloadPattern }: Pa
     const customizeKey = side === 'Front' ? 'fabricPatternCustomizeFront' : 'fabricPatternCustomizeBack';
 
     return (
-      <div key={side} className="space-y-2.5 pb-4 border-b border-zinc-800/60 last:border-0">
-        <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">{side} Panel</div>
+      <div key={side} className="space-y-2.5 pb-4 border-b border-zinc-200/60 last:border-0">
+        <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-600">{side} Panel</div>
 
         {/* None button + pattern grid */}
         <div className="grid grid-cols-4 gap-2">
           <button onClick={() => onUpdate(patternKey, 'None')}
-            className={`rounded-xl border-2 aspect-square flex items-center justify-center text-[9px] font-bold transition-all cursor-pointer ${pattern === 'None' ? 'border-indigo-600 bg-indigo-600 text-white shadow-sm' : 'border-zinc-800 text-zinc-500 hover:border-zinc-700 bg-[#16161c] hover:text-zinc-300'}`}>
+            className={`rounded-xl border-2 aspect-square flex items-center justify-center text-[9px] font-bold transition-all cursor-pointer ${pattern === 'None' ? 'border-blue-600 bg-blue-600 text-white shadow-sm' : 'border-zinc-200 text-zinc-500 hover:border-zinc-400 bg-[#e9ede6] hover:text-zinc-700'}`}>
             None
           </button>
           
           {/* Default Patterns */}
           {FABRIC_PATTERNS.map(p => (
             <button key={p.id} onClick={() => { onUpdate(patternKey, p.id); preloadPattern(p.id); }}
-              className={`rounded-xl border-2 overflow-hidden aspect-square transition-all hover:scale-[1.03] bg-[#16161c] cursor-pointer ${pattern === p.id ? 'border-indigo-600 shadow-lg shadow-indigo-650/15' : 'border-zinc-800 hover:border-zinc-700'}`}>
+              className={`rounded-xl border-2 overflow-hidden aspect-square transition-all hover:scale-[1.03] bg-[#e9ede6] cursor-pointer ${pattern === p.id ? 'border-blue-600 shadow-lg shadow-blue-600/15' : 'border-zinc-200 hover:border-zinc-400'}`}>
               <img src={p.id} alt={p.name} className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity" />
             </button>
           ))}
@@ -116,7 +116,7 @@ export default function PatternsSettings({ state, onUpdate, preloadPattern }: Pa
           {/* Custom Uploaded Patterns */}
           {uploadedPatterns.map((src, idx) => (
             <button key={`uploaded-${side}-${idx}`} onClick={() => { onUpdate(patternKey, src); preloadPattern(src); }}
-              className={`rounded-xl border-2 overflow-hidden aspect-square transition-all hover:scale-[1.03] bg-[#16161c] cursor-pointer ${pattern === src ? 'border-indigo-600 shadow-lg shadow-indigo-650/15' : 'border-zinc-800 hover:border-zinc-700'}`}>
+              className={`rounded-xl border-2 overflow-hidden aspect-square transition-all hover:scale-[1.03] bg-[#e9ede6] cursor-pointer ${pattern === src ? 'border-blue-600 shadow-lg shadow-blue-600/15' : 'border-zinc-200 hover:border-zinc-400'}`}>
               <img src={src} alt={`Uploaded ${idx + 1}`} className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity" />
             </button>
           ))}
@@ -124,20 +124,20 @@ export default function PatternsSettings({ state, onUpdate, preloadPattern }: Pa
 
         {/* Customize colors */}
         {pattern !== 'None' && (
-          <div className="space-y-2 bg-[#16161c] rounded-xl p-3 border border-zinc-800">
+          <div className="space-y-2 bg-[#e9ede6] rounded-xl p-3 border border-zinc-200">
             <label className="flex items-center justify-between cursor-pointer">
-              <span className="text-[10px] font-semibold text-zinc-300">Customize Colors</span>
-              <input type="checkbox" checked={customize} onChange={e => onUpdate(customizeKey, e.target.checked)} className="accent-indigo-500 w-3.5 h-3.5 cursor-pointer" />
+              <span className="text-[10px] font-semibold text-zinc-700">Customize Colors</span>
+              <input type="checkbox" checked={customize} onChange={e => onUpdate(customizeKey, e.target.checked)} className="accent-blue-500 w-3.5 h-3.5 cursor-pointer" />
             </label>
             {customize && (
               <div className="grid grid-cols-2 gap-2">
                 <div className="space-y-1">
                   <span className="text-[9px] text-zinc-500">Design Color</span>
-                  <input type="color" value={color} onChange={e => onUpdate(colorKey, e.target.value)} className="w-full h-7 border border-zinc-800 rounded-lg cursor-pointer bg-[#1e1e24]" />
+                  <input type="color" value={color} onChange={e => onUpdate(colorKey, e.target.value)} className="w-full h-7 border border-zinc-200 rounded-lg cursor-pointer bg-[#e9ede6]" />
                 </div>
                 <div className="space-y-1">
                   <span className="text-[9px] text-zinc-500">Background</span>
-                  <input type="color" value={bg === 'transparent' ? '#ffffff' : bg} onChange={e => onUpdate(bgKey, e.target.value)} className="w-full h-7 border border-zinc-800 rounded-lg cursor-pointer bg-[#1e1e24]" />
+                  <input type="color" value={bg === 'transparent' ? '#ffffff' : bg} onChange={e => onUpdate(bgKey, e.target.value)} className="w-full h-7 border border-zinc-200 rounded-lg cursor-pointer bg-[#e9ede6]" />
                 </div>
               </div>
             )}
@@ -148,16 +148,16 @@ export default function PatternsSettings({ state, onUpdate, preloadPattern }: Pa
   };
 
   return (
-    <div className="space-y-4 font-sans text-xs text-zinc-300">
-      <div className="text-[10px] font-bold uppercase tracking-wider text-indigo-400">Fabric Texture Patterns</div>
+    <div className="space-y-4 font-body text-xs text-zinc-700">
+      <div className="text-[10px] font-bold uppercase tracking-wider text-blue-700">Fabric Texture Patterns</div>
 
       {/* Pattern Upload Section */}
-      <div className="space-y-2.5 p-3 bg-[#16161c] border border-zinc-800 rounded-xl">
-        <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 flex items-center justify-between">
+      <div className="space-y-2.5 p-3 bg-[#e9ede6] border border-zinc-200 rounded-xl">
+        <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-600 flex items-center justify-between">
           <span>Uploaded Custom Patterns</span>
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="flex items-center gap-1 py-1 px-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-[9px] transition-all cursor-pointer"
+            className="flex items-center gap-1 py-1 px-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold text-[9px] transition-all cursor-pointer"
           >
             <Upload className="w-3 h-3" /> Upload Pattern
           </button>
@@ -171,7 +171,7 @@ export default function PatternsSettings({ state, onUpdate, preloadPattern }: Pa
         />
 
         {uploadedPatterns.length === 0 ? (
-          <div className="text-center py-4 border border-dashed border-zinc-800 rounded-lg text-zinc-500 text-[10px]">
+          <div className="text-center py-4 border border-dashed border-zinc-200 rounded-lg text-zinc-500 text-[10px]">
             No custom patterns uploaded yet. Click Upload to add your own.
           </div>
         ) : (
@@ -184,8 +184,8 @@ export default function PatternsSettings({ state, onUpdate, preloadPattern }: Pa
                 <div
                   key={idx}
                   onClick={() => setSelectedUploadedSrc(isSelected ? null : src)}
-                  className={`relative aspect-square rounded-lg border-2 overflow-hidden cursor-pointer transition-all hover:scale-[1.03] bg-[#0c0c0f] ${
-                    isSelected ? 'border-indigo-500 ring-2 ring-indigo-500/20' : 'border-zinc-800 hover:border-zinc-700'
+                  className={`relative aspect-square rounded-lg border-2 overflow-hidden cursor-pointer transition-all hover:scale-[1.03] bg-[#e9ede6] ${
+                    isSelected ? 'border-blue-500 ring-2 ring-blue-500/20' : 'border-zinc-200 hover:border-zinc-400'
                   }`}
                 >
                   <img src={src} alt={`Uploaded ${idx}`} className="w-full h-full object-cover opacity-85 hover:opacity-100" />
@@ -193,12 +193,12 @@ export default function PatternsSettings({ state, onUpdate, preloadPattern }: Pa
                   {/* Indicators for Front/Back applied */}
                   <div className="absolute bottom-0.5 left-0.5 right-0.5 flex gap-0.5">
                     {isAppliedFront && (
-                      <span className="bg-indigo-600 text-white text-[7px] font-bold px-1 rounded-sm scale-90 origin-bottom-left">
+                      <span className="bg-blue-600 text-white text-[7px] font-bold px-1 rounded-sm scale-90 origin-bottom-left">
                         F
                       </span>
                     )}
                     {isAppliedBack && (
-                      <span className="bg-violet-600 text-white text-[7px] font-bold px-1 rounded-sm scale-90 origin-bottom-left">
+                      <span className="bg-blue-600 text-white text-[7px] font-bold px-1 rounded-sm scale-90 origin-bottom-left">
                         B
                       </span>
                     )}
@@ -211,8 +211,8 @@ export default function PatternsSettings({ state, onUpdate, preloadPattern }: Pa
 
         {/* Selected Uploaded Pattern Actions */}
         {selectedUploadedSrc && (
-          <div className="mt-2 pt-2 border-t border-zinc-800 space-y-2">
-            <div className="text-[9px] text-zinc-400 font-semibold">Apply Custom Pattern:</div>
+          <div className="mt-2 pt-2 border-t border-zinc-200 space-y-2">
+            <div className="text-[9px] text-zinc-600 font-semibold">Apply Custom Pattern:</div>
             <div className="flex gap-1.5">
               <button
                 onClick={() => {
@@ -221,8 +221,8 @@ export default function PatternsSettings({ state, onUpdate, preloadPattern }: Pa
                 }}
                 className={`flex-1 py-1 rounded-lg text-[9px] font-bold cursor-pointer transition-all border ${
                   state.fabricPatternFront === selectedUploadedSrc
-                    ? 'bg-indigo-600 border-indigo-500 text-white shadow'
-                    : 'bg-[#16161c] border-zinc-800 text-zinc-300 hover:border-zinc-700'
+                    ? 'bg-blue-600 border-blue-500 text-white shadow'
+                    : 'bg-[#e9ede6] border-zinc-200 text-zinc-700 hover:border-zinc-400'
                 }`}
               >
                 Front Side
@@ -234,8 +234,8 @@ export default function PatternsSettings({ state, onUpdate, preloadPattern }: Pa
                 }}
                 className={`flex-1 py-1 rounded-lg text-[9px] font-bold cursor-pointer transition-all border ${
                   state.fabricPatternBack === selectedUploadedSrc
-                    ? 'bg-indigo-600 border-indigo-500 text-white shadow'
-                    : 'bg-[#16161c] border-zinc-800 text-zinc-300 hover:border-zinc-700'
+                    ? 'bg-blue-600 border-blue-500 text-white shadow'
+                    : 'bg-[#e9ede6] border-zinc-200 text-zinc-700 hover:border-zinc-400'
                 }`}
               >
                 Back Side
@@ -246,7 +246,7 @@ export default function PatternsSettings({ state, onUpdate, preloadPattern }: Pa
                   onUpdate('fabricPatternBack', selectedUploadedSrc);
                   preloadPattern(selectedUploadedSrc);
                 }}
-                className="flex-1 py-1 rounded-lg text-[9px] font-bold cursor-pointer bg-[#20202e] border border-zinc-800 text-indigo-400 hover:bg-[#252538] transition-all"
+                className="flex-1 py-1 rounded-lg text-[9px] font-bold cursor-pointer bg-[#e9ede6] border border-zinc-200 text-blue-700 hover:bg-[#e9ede6] transition-all"
               >
                 Both
               </button>

@@ -483,13 +483,13 @@ export default function TextSettings({ state, onAddTextLayer, onUpdateTextLayer,
   }, [fabricInstance]);
 
   return (
-    <div className="space-y-4 font-sans text-xs pb-4 text-slate-300">
-      <div className="text-[10px] font-bold uppercase tracking-wider text-violet-400 flex items-center gap-1.5">
-        <Type className="w-3.5 h-3.5 text-indigo-450" /> Custom Printed Text
+    <div className="space-y-4 font-body text-xs pb-4 text-slate-700">
+      <div className="text-[10px] font-bold uppercase tracking-wider text-blue-700 flex items-center gap-1.5">
+        <Type className="w-3.5 h-3.5 text-blue-450" /> Custom Printed Text
       </div>
 
       {/* Side Selector */}
-      <div className="flex bg-[#1c1c26] p-0.5 rounded-lg border border-white/[0.06] text-[10px]">
+      <div className="flex bg-[#e9ede6] p-0.5 rounded-lg border border-[#dbe0d6] text-[10px]">
         {(['Front', 'Back'] as const).map(s => (
           <button key={s}
             onClick={() => {
@@ -499,7 +499,7 @@ export default function TextSettings({ state, onAddTextLayer, onUpdateTextLayer,
                 setSide(s);
               }
             }}
-            className={`flex-1 py-1 rounded-md font-semibold transition-all cursor-pointer ${currentSide === s ? 'bg-violet-600 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'}`}>
+            className={`flex-1 py-1 rounded-md font-semibold transition-all cursor-pointer ${currentSide === s ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-800'}`}>
             {s}
           </button>
         ))}
@@ -519,7 +519,7 @@ export default function TextSettings({ state, onAddTextLayer, onUpdateTextLayer,
           }}
           rows={2}
           placeholder="Enter text (use ↵ for new line)"
-          className="w-full bg-[#1c1c26] border border-white/[0.06] rounded-xl px-3 py-2 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 resize-none"
+          className="w-full bg-[#e9ede6] border border-[#dbe0d6] rounded-xl px-3 py-2 text-xs text-slate-800 placeholder-slate-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-none"
         />
       </div>
 
@@ -536,18 +536,18 @@ export default function TextSettings({ state, onAddTextLayer, onUpdateTextLayer,
                 setFont(e.target.value);
               }
             }}
-            className="w-full h-8 bg-[#1c1c26] border border-white/[0.06] rounded-lg px-2 text-[11px] text-slate-300 focus:outline-none focus:border-violet-500"
+            className="w-full h-8 bg-[#e9ede6] border border-[#dbe0d6] rounded-lg px-2 text-[11px] text-slate-700 focus:outline-none focus:border-blue-500"
           >
-            <optgroup label="System/Legacy Fonts" className="bg-[#16161a]">
+            <optgroup label="System/Legacy Fonts" className="bg-[#e9ede6]">
               {LEGACY_FONT_STYLES.map(f => (
-                <option key={f} value={f} className="bg-[#1c1c26]">
+                <option key={f} value={f} className="bg-[#e9ede6]">
                   {f}
                 </option>
               ))}
             </optgroup>
-            <optgroup label="Custom Premium Fonts" className="bg-[#16161a]">
+            <optgroup label="Custom Premium Fonts" className="bg-[#e9ede6]">
               {CUSTOM_FONTS.map(f => (
-                <option key={f} value={f} style={{ fontFamily: `"${f}", sans-serif` }} className="bg-[#1c1c26]">
+                <option key={f} value={f} style={{ fontFamily: `"${f}", sans-serif` }} className="bg-[#e9ede6]">
                   {f}
                 </option>
               ))}
@@ -566,7 +566,7 @@ export default function TextSettings({ state, onAddTextLayer, onUpdateTextLayer,
                 setColor(e.target.value);
               }
             }}
-            className="w-full h-8 border border-white/[0.06] bg-[#1c1c26] rounded-lg cursor-pointer px-1 py-0.5"
+            className="w-full h-8 border border-[#dbe0d6] bg-[#e9ede6] rounded-lg cursor-pointer px-1 py-0.5"
           />
         </div>
       </div>
@@ -584,10 +584,10 @@ export default function TextSettings({ state, onAddTextLayer, onUpdateTextLayer,
               setFontWeight(val);
             }
           }}
-          className="w-full h-8 bg-[#1c1c26] border border-white/[0.06] rounded-lg px-2 text-[11px] text-slate-300 focus:outline-none focus:border-violet-500"
+          className="w-full h-8 bg-[#e9ede6] border border-[#dbe0d6] rounded-lg px-2 text-[11px] text-slate-700 focus:outline-none focus:border-blue-500"
         >
           {FONT_WEIGHTS.map(fw => (
-            <option key={fw.value} value={fw.value} className="bg-[#1c1c26]">
+            <option key={fw.value} value={fw.value} className="bg-[#e9ede6]">
               {fw.label}
             </option>
           ))}
@@ -605,7 +605,7 @@ export default function TextSettings({ state, onAddTextLayer, onUpdateTextLayer,
                 if (selected) handleUpdate({ textSize: val });
                 else setSize(val);
               }}
-              className="w-5 h-5 bg-[#1c1c26] hover:bg-zinc-800 border border-white/[0.06] rounded flex items-center justify-center font-bold text-slate-300 transition-colors cursor-pointer"
+              className="w-5 h-5 bg-[#e9ede6] hover:bg-zinc-200 border border-[#dbe0d6] rounded flex items-center justify-center font-bold text-slate-700 transition-colors cursor-pointer"
             >
               -
             </button>
@@ -621,7 +621,7 @@ export default function TextSettings({ state, onAddTextLayer, onUpdateTextLayer,
                 if (selected) handleUpdate({ textSize: val });
                 else setSize(val);
               }}
-              className="w-12 bg-[#1c1c26] border border-white/[0.06] rounded px-1 py-0.5 text-center font-bold text-slate-300 focus:outline-none focus:border-violet-500"
+              className="w-12 bg-[#e9ede6] border border-[#dbe0d6] rounded px-1 py-0.5 text-center font-bold text-slate-700 focus:outline-none focus:border-blue-500"
             />
             <button
               onClick={() => {
@@ -629,7 +629,7 @@ export default function TextSettings({ state, onAddTextLayer, onUpdateTextLayer,
                 if (selected) handleUpdate({ textSize: val });
                 else setSize(val);
               }}
-              className="w-5 h-5 bg-[#1c1c26] hover:bg-zinc-800 border border-white/[0.06] rounded flex items-center justify-center font-bold text-slate-300 transition-colors cursor-pointer"
+              className="w-5 h-5 bg-[#e9ede6] hover:bg-zinc-200 border border-[#dbe0d6] rounded flex items-center justify-center font-bold text-slate-700 transition-colors cursor-pointer"
             >
               +
             </button>
@@ -649,7 +649,7 @@ export default function TextSettings({ state, onAddTextLayer, onUpdateTextLayer,
               setSize(val);
             }
           }}
-          className="w-full accent-violet-500 h-1.5 bg-[#1c1c26] rounded-lg appearance-none cursor-pointer"
+          className="w-full accent-blue-500 h-1.5 bg-[#e9ede6] rounded-lg appearance-none cursor-pointer"
         />
       </div>
 
@@ -673,7 +673,7 @@ export default function TextSettings({ state, onAddTextLayer, onUpdateTextLayer,
                   setCurveRadius(val);
                 }
               }}
-              className="w-12 bg-[#1c1c26] border border-white/[0.06] rounded px-1.5 py-0.5 text-right font-bold text-slate-300 focus:outline-none focus:border-violet-500"
+              className="w-12 bg-[#e9ede6] border border-[#dbe0d6] rounded px-1.5 py-0.5 text-right font-bold text-slate-700 focus:outline-none focus:border-blue-500"
             />
             <span className="text-slate-600 font-medium">°</span>
           </div>
@@ -688,8 +688,8 @@ export default function TextSettings({ state, onAddTextLayer, onUpdateTextLayer,
             }}
             className={`flex-1 py-1 rounded-lg text-[10px] font-semibold transition-all border cursor-pointer ${
               currentCurveRadius === -60
-                ? 'bg-violet-600/20 border-violet-500 text-violet-300'
-                : 'bg-[#1c1c26] border-white/[0.06] text-slate-400 hover:text-slate-200'
+                ? 'bg-blue-600/20 border-blue-500 text-blue-700'
+                : 'bg-[#e9ede6] border-[#dbe0d6] text-slate-600 hover:text-slate-800'
             }`}
           >
             Curve Up
@@ -701,8 +701,8 @@ export default function TextSettings({ state, onAddTextLayer, onUpdateTextLayer,
             }}
             className={`flex-1 py-1 rounded-lg text-[10px] font-semibold transition-all border cursor-pointer ${
               currentCurveRadius === 0
-                ? 'bg-violet-600/20 border-violet-500 text-violet-300'
-                : 'bg-[#1c1c26] border-white/[0.06] text-slate-400 hover:text-slate-200'
+                ? 'bg-blue-600/20 border-blue-500 text-blue-700'
+                : 'bg-[#e9ede6] border-[#dbe0d6] text-slate-600 hover:text-slate-800'
             }`}
           >
             Flat (None)
@@ -714,8 +714,8 @@ export default function TextSettings({ state, onAddTextLayer, onUpdateTextLayer,
             }}
             className={`flex-1 py-1 rounded-lg text-[10px] font-semibold transition-all border cursor-pointer ${
               currentCurveRadius === 60
-                ? 'bg-violet-600/20 border-violet-500 text-violet-300'
-                : 'bg-[#1c1c26] border-white/[0.06] text-slate-400 hover:text-slate-200'
+                ? 'bg-blue-600/20 border-blue-500 text-blue-700'
+                : 'bg-[#e9ede6] border-[#dbe0d6] text-slate-600 hover:text-slate-800'
             }`}
           >
             Curve Down
@@ -737,24 +737,24 @@ export default function TextSettings({ state, onAddTextLayer, onUpdateTextLayer,
                 setCurveRadius(val);
               }
             }}
-            className="w-full accent-violet-500 h-1.5 bg-[#1c1c26] rounded-lg appearance-none cursor-pointer"
+            className="w-full accent-blue-500 h-1.5 bg-[#e9ede6] rounded-lg appearance-none cursor-pointer"
           />
         </div>
       </div>
 
       {/* Advanced toggle */}
       <button onClick={() => setAdvanced(!advanced)}
-        className="flex items-center gap-1 text-[10px] text-slate-400 hover:text-slate-200 transition-colors">
+        className="flex items-center gap-1 text-[10px] text-slate-600 hover:text-slate-800 transition-colors">
         <ChevronDown className={`w-3.5 h-3.5 transition-transform ${advanced ? 'rotate-180' : ''}`} />
         Advanced Options
       </button>
 
       {advanced && (
-        <div className="space-y-3 bg-[#1c1c26] rounded-xl p-3 border border-white/[0.06]">
+        <div className="space-y-3 bg-[#e9ede6] rounded-xl p-3 border border-[#dbe0d6]">
           {/* Letter spacing */}
           <div className="space-y-1">
             <div className="flex justify-between text-[10px] text-slate-500">
-              <span>Letter Spacing</span><span className="font-bold text-slate-300">{currentLetterSpacing}px</span>
+              <span>Letter Spacing</span><span className="font-bold text-slate-700">{currentLetterSpacing}px</span>
             </div>
             <input
               type="range"
@@ -769,13 +769,13 @@ export default function TextSettings({ state, onAddTextLayer, onUpdateTextLayer,
                   setLetterSpacing(val);
                 }
               }}
-              className="w-full accent-violet-500 h-1.5 bg-[#1c1c26] rounded-lg appearance-none cursor-pointer"
+              className="w-full accent-blue-500 h-1.5 bg-[#e9ede6] rounded-lg appearance-none cursor-pointer"
             />
           </div>
 
           {/* Shadow */}
           <label className="flex items-center justify-between cursor-pointer">
-            <span className="text-[10px] font-semibold text-slate-300">Drop Shadow</span>
+            <span className="text-[10px] font-semibold text-slate-700">Drop Shadow</span>
             <input
               type="checkbox"
               checked={currentShadowEnabled}
@@ -787,14 +787,14 @@ export default function TextSettings({ state, onAddTextLayer, onUpdateTextLayer,
                   setShadowEnabled(val);
                 }
               }}
-              className="accent-violet-500 w-4 h-4 cursor-pointer"
+              className="accent-blue-500 w-4 h-4 cursor-pointer"
             />
           </label>
 
           {/* Outline */}
           <div className="space-y-2">
             <label className="flex items-center justify-between cursor-pointer">
-              <span className="text-[10px] font-semibold text-slate-300">Outline</span>
+              <span className="text-[10px] font-semibold text-slate-700">Outline</span>
               <input
                 type="checkbox"
                 checked={currentOutlineEnabled}
@@ -806,7 +806,7 @@ export default function TextSettings({ state, onAddTextLayer, onUpdateTextLayer,
                     setOutlineEnabled(val);
                   }
                 }}
-                className="accent-violet-500 w-4 h-4 cursor-pointer"
+                className="accent-blue-500 w-4 h-4 cursor-pointer"
               />
             </label>
             {currentOutlineEnabled && (
@@ -824,7 +824,7 @@ export default function TextSettings({ state, onAddTextLayer, onUpdateTextLayer,
                         setOutlineColor(val);
                       }
                     }}
-                    className="w-full h-7 border border-white/[0.06] rounded-lg cursor-pointer bg-[#1c1c26] px-1 py-0.5"
+                    className="w-full h-7 border border-[#dbe0d6] rounded-lg cursor-pointer bg-[#e9ede6] px-1 py-0.5"
                   />
                 </div>
                 <div className="space-y-1">
@@ -842,7 +842,7 @@ export default function TextSettings({ state, onAddTextLayer, onUpdateTextLayer,
                         setOutlineWidth(val);
                       }
                     }}
-                    className="w-full accent-violet-500 mt-1 h-1.5 bg-[#1c1c26] rounded-lg appearance-none cursor-pointer"
+                    className="w-full accent-blue-500 mt-1 h-1.5 bg-[#e9ede6] rounded-lg appearance-none cursor-pointer"
                   />
                 </div>
               </div>
@@ -855,14 +855,14 @@ export default function TextSettings({ state, onAddTextLayer, onUpdateTextLayer,
       {selected ? (
         <button
           onClick={() => setSelectedId(null)}
-          className="w-full py-2.5 px-4 rounded-xl border border-white/[0.06] hover:bg-[#20202e] text-slate-100 font-semibold text-xs transition-all active:scale-98 shadow-sm flex items-center justify-center gap-1.5 cursor-pointer bg-[#1c1c26]"
+          className="w-full py-2.5 px-4 rounded-xl border border-[#dbe0d6] hover:bg-[#e9ede6] text-slate-900 font-semibold text-xs transition-all active:scale-98 shadow-sm flex items-center justify-center gap-1.5 cursor-pointer bg-[#e9ede6]"
         >
           <span>Deselect / Create New Text</span>
         </button>
       ) : (
         <button
           onClick={handleAdd}
-          className="w-full py-2.5 px-4 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-semibold text-xs transition-all active:scale-98 shadow-md shadow-violet-600/15 flex items-center justify-center gap-1.5 cursor-pointer"
+          className="w-full py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs transition-all active:scale-98 shadow-md shadow-blue-600/15 flex items-center justify-center gap-1.5 cursor-pointer"
         >
           <Plus className="w-3.5 h-3.5" /> Add to {currentSide}
         </button>
@@ -870,7 +870,7 @@ export default function TextSettings({ state, onAddTextLayer, onUpdateTextLayer,
 
       {/* List of existing text layers */}
       {state.textLayers.length > 0 && (
-        <div className="space-y-1.5 pt-2 border-t border-white/[0.06]">
+        <div className="space-y-1.5 pt-2 border-t border-[#dbe0d6]">
           <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
             Text Layers ({state.textLayers.length})
           </div>
@@ -882,12 +882,12 @@ export default function TextSettings({ state, onAddTextLayer, onUpdateTextLayer,
                   key={l.id}
                   onClick={() => setSelectedId(isSelected ? null : l.id)}
                   className={`flex items-center justify-between p-2.5 rounded-xl cursor-pointer border transition-all ${
-                    isSelected ? 'bg-[#1e1e2e] border-violet-600 shadow-sm shadow-violet-600/10' : 'bg-[#1c1c26] border-white/[0.06] hover:bg-[#20202e]'
+                    isSelected ? 'bg-[#e9ede6] border-blue-600 shadow-sm shadow-blue-600/10' : 'bg-[#e9ede6] border-[#dbe0d6] hover:bg-[#e9ede6]'
                   }`}
                 >
                   <div className="flex items-center gap-2 min-w-0">
-                    <div className="w-3 h-3 rounded-full border border-white/10 flex-shrink-0" style={{ backgroundColor: l.color }} />
-                    <span className="text-[10px] font-semibold text-slate-200 truncate">{l.text}</span>
+                    <div className="w-3 h-3 rounded-full border border-[#dbe0d6] flex-shrink-0" style={{ backgroundColor: l.color }} />
+                    <span className="text-[10px] font-semibold text-slate-800 truncate">{l.text}</span>
                     <span className="text-[9px] text-slate-500 flex-shrink-0">{l.side}</span>
                   </div>
                   <button
@@ -908,11 +908,11 @@ export default function TextSettings({ state, onAddTextLayer, onUpdateTextLayer,
       )}
 
       {/* Visual Text Editor Canvas */}
-      <div className="space-y-2 pt-3 border-t border-white/[0.06]">
+      <div className="space-y-2 pt-3 border-t border-[#dbe0d6]">
         <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
           Visual Text Editor ({currentSide === 'Front' ? 'Front View' : 'Back View'})
         </div>
-        <div className="relative w-full aspect-square bg-[#16161a] border border-zinc-800 rounded-2xl overflow-hidden flex items-center justify-center pointer-events-auto">
+        <div className="relative w-full aspect-square bg-[#e9ede6] border border-zinc-200 rounded-2xl overflow-hidden flex items-center justify-center pointer-events-auto">
           {/* Silhouette overlay vector path behind transparent Fabric.js layer */}
           <svg
             className="absolute w-4/5 h-4/5 pointer-events-none"

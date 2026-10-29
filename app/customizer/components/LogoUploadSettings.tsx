@@ -308,23 +308,23 @@ export default function LogoUploadSettings({
   });
 
   return (
-    <div className="space-y-4 font-sans text-xs pb-4 text-zinc-350">
+    <div className="space-y-4 font-body text-xs pb-4 text-zinc-350">
       <input type="file" ref={fileInputRef} onChange={handleFileUpload}
         accept="image/png,image/jpeg,image/svg+xml,image/webp" className="hidden" />
 
       {/* Asset Library Uploader */}
-      <div className="space-y-2.5 p-3 bg-[#16161c] border border-zinc-800 rounded-xl">
-        <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+      <div className="space-y-2.5 p-3 bg-[#e9ede6] border border-zinc-200 rounded-xl">
+        <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-600">
           Upload Image Library
         </div>
 
         {/* Beautiful upload dropzone button */}
         <div 
           onClick={() => fileInputRef.current?.click()}
-          className="w-full border-2 border-dashed border-zinc-800 hover:border-indigo-500/50 hover:bg-[#1c1c28]/40 transition-all rounded-xl p-4 flex flex-col items-center justify-center gap-1.5 cursor-pointer group"
+          className="w-full border-2 border-dashed border-zinc-200 hover:border-blue-500/50 hover:bg-[#e9ede6]/40 transition-all rounded-xl p-4 flex flex-col items-center justify-center gap-1.5 cursor-pointer group"
         >
-          <div className="w-8 h-8 rounded-full bg-[#111115] border border-zinc-800 flex items-center justify-center group-hover:bg-indigo-650/10 group-hover:border-indigo-500/30 transition-all">
-            <Upload className="w-4 h-4 text-zinc-500 group-hover:text-indigo-400 transition-all" />
+          <div className="w-8 h-8 rounded-full bg-[#f2f3ef] border border-zinc-200 flex items-center justify-center group-hover:bg-blue-650/10 group-hover:border-blue-500/30 transition-all">
+            <Upload className="w-4 h-4 text-zinc-500 group-hover:text-blue-700 transition-all" />
           </div>
           <div className="text-[10px] font-semibold text-zinc-450 group-hover:text-zinc-200 transition-all">
             Upload Image asset
@@ -347,8 +347,8 @@ export default function LogoUploadSettings({
                   <div
                     key={idx}
                     onClick={() => setSelectedUploadedImg(isSelected ? null : src)}
-                    className={`relative aspect-square rounded-lg border-2 overflow-hidden cursor-pointer transition-all hover:scale-[1.03] bg-[#0c0c0f] ${
-                      isSelected ? 'border-indigo-500 ring-2 ring-indigo-500/20' : 'border-zinc-800 hover:border-zinc-700'
+                    className={`relative aspect-square rounded-lg border-2 overflow-hidden cursor-pointer transition-all hover:scale-[1.03] bg-[#e9ede6] ${
+                      isSelected ? 'border-blue-500 ring-2 ring-blue-500/20' : 'border-zinc-200 hover:border-zinc-400'
                     }`}
                   >
                     <img src={src} alt="Uploaded logo" className="w-full h-full object-contain p-1 opacity-85 hover:opacity-100" />
@@ -356,12 +356,12 @@ export default function LogoUploadSettings({
                     {/* Indicators for Front/Back applied */}
                     <div className="absolute bottom-0.5 left-0.5 right-0.5 flex gap-0.5">
                       {appliedFront && (
-                        <span className="bg-indigo-600 text-white text-[7px] font-bold px-1 rounded-sm scale-90 origin-bottom-left">
+                        <span className="bg-blue-600 text-white text-[7px] font-bold px-1 rounded-sm scale-90 origin-bottom-left">
                           F
                         </span>
                       )}
                       {appliedBack && (
-                        <span className="bg-violet-650 text-white text-[7px] font-bold px-1 rounded-sm scale-90 origin-bottom-left">
+                        <span className="bg-blue-650 text-white text-[7px] font-bold px-1 rounded-sm scale-90 origin-bottom-left">
                           B
                         </span>
                       )}
@@ -375,20 +375,20 @@ export default function LogoUploadSettings({
 
         {/* Selected asset action box */}
         {selectedUploadedImg && (
-          <div className="mt-2.5 pt-2.5 border-t border-zinc-800 space-y-2.5">
+          <div className="mt-2.5 pt-2.5 border-t border-zinc-200 space-y-2.5">
             {/* Placement Type choice */}
             <div className="space-y-1">
               <span className="text-[9px] text-zinc-500 font-semibold uppercase">Placement Type</span>
-              <div className="flex bg-[#111115] p-0.5 rounded-lg border border-zinc-800 text-[9px]">
+              <div className="flex bg-[#f2f3ef] p-0.5 rounded-lg border border-zinc-200 text-[9px]">
                 <button 
                   onClick={() => setAddType('logo')}
-                  className={`flex-1 py-1 rounded-md font-semibold flex items-center justify-center gap-1 transition-all cursor-pointer ${addType === 'logo' ? 'bg-indigo-600 text-white shadow-sm' : 'text-zinc-400 hover:text-zinc-200'}`}
+                  className={`flex-1 py-1 rounded-md font-semibold flex items-center justify-center gap-1 transition-all cursor-pointer ${addType === 'logo' ? 'bg-blue-600 text-white shadow-sm' : 'text-zinc-600 hover:text-zinc-200'}`}
                 >
                   <Layers className="w-2.5 h-2.5" /> 3D Decal
                 </button>
                 <button 
                   onClick={() => setAddType('image')}
-                  className={`flex-1 py-1 rounded-md font-semibold flex items-center justify-center gap-1 transition-all cursor-pointer ${addType === 'image' ? 'bg-indigo-600 text-white shadow-sm' : 'text-zinc-400 hover:text-zinc-200'}`}
+                  className={`flex-1 py-1 rounded-md font-semibold flex items-center justify-center gap-1 transition-all cursor-pointer ${addType === 'image' ? 'bg-blue-600 text-white shadow-sm' : 'text-zinc-600 hover:text-zinc-200'}`}
                 >
                   <ImageIcon className="w-2.5 h-2.5" /> Flat Image
                 </button>
@@ -401,19 +401,19 @@ export default function LogoUploadSettings({
               <div className="flex gap-1.5">
                 <button
                   onClick={() => addLayerToSide('Front')}
-                  className="flex-1 py-1 rounded-lg text-[9px] font-bold bg-[#16161c] border border-zinc-800 text-zinc-300 hover:border-zinc-700 transition-all cursor-pointer"
+                  className="flex-1 py-1 rounded-lg text-[9px] font-bold bg-[#e9ede6] border border-zinc-200 text-zinc-700 hover:border-zinc-400 transition-all cursor-pointer"
                 >
                   Front
                 </button>
                 <button
                   onClick={() => addLayerToSide('Back')}
-                  className="flex-1 py-1 rounded-lg text-[9px] font-bold bg-[#16161c] border border-zinc-800 text-zinc-300 hover:border-zinc-700 transition-all cursor-pointer"
+                  className="flex-1 py-1 rounded-lg text-[9px] font-bold bg-[#e9ede6] border border-zinc-200 text-zinc-700 hover:border-zinc-400 transition-all cursor-pointer"
                 >
                   Back
                 </button>
                 <button
                   onClick={addLayerToBoth}
-                  className="flex-1 py-1 rounded-lg text-[9px] font-bold bg-[#20202e] border border-zinc-800 text-indigo-400 hover:bg-[#252538] transition-all cursor-pointer"
+                  className="flex-1 py-1 rounded-lg text-[9px] font-bold bg-[#e9ede6] border border-zinc-200 text-blue-700 hover:bg-[#e9ede6] transition-all cursor-pointer"
                 >
                   Both
                 </button>
@@ -431,14 +431,14 @@ export default function LogoUploadSettings({
       </div>
 
       {/* Side selector for visual positioning editor */}
-      <div className="space-y-1 pt-2 border-t border-zinc-800">
-        <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 mb-1.5">
+      <div className="space-y-1 pt-2 border-t border-zinc-200">
+        <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-600 mb-1.5">
           Select View to Position
         </div>
-        <div className="flex bg-[#16161c] p-0.5 rounded-lg border border-zinc-800 text-[10px]">
+        <div className="flex bg-[#e9ede6] p-0.5 rounded-lg border border-zinc-200 text-[10px]">
           {(['Front', 'Back'] as const).map(s => (
             <button key={s} onClick={() => setAddSide(s)}
-              className={`flex-1 py-1 rounded-md font-semibold transition-all cursor-pointer ${addSide === s ? 'bg-indigo-600 text-white shadow-sm' : 'text-zinc-400 hover:text-zinc-200'}`}>
+              className={`flex-1 py-1 rounded-md font-semibold transition-all cursor-pointer ${addSide === s ? 'bg-blue-600 text-white shadow-sm' : 'text-zinc-600 hover:text-zinc-200'}`}>
               {s} View Editor
             </button>
           ))}
@@ -447,8 +447,8 @@ export default function LogoUploadSettings({
 
       {/* Layer list */}
       {sortedLayers.length > 0 && (
-        <div className="space-y-2 pt-2 border-t border-zinc-800">
-          <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+        <div className="space-y-2 pt-2 border-t border-zinc-200">
+          <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-600">
             Placed Layers ({sortedLayers.length})
           </div>
           <div className="space-y-1.5 max-h-40 overflow-y-auto">
@@ -457,12 +457,12 @@ export default function LogoUploadSettings({
               return (
                 <div key={l.id} onClick={() => setSelectedId(isSelected ? null : l.id)}
                   className={`p-2.5 rounded-xl border cursor-pointer transition-all flex items-center justify-between ${
-                    isSelected ? 'bg-[#1e1e28] border-indigo-600 shadow-sm shadow-indigo-650/10' : 'bg-[#16161c] border-zinc-800 hover:bg-[#1a1a24]'
+                    isSelected ? 'bg-[#e7ecfc] border-blue-600 shadow-sm shadow-blue-600/10' : 'bg-[#e9ede6] border-zinc-200 hover:bg-[#e9ede6]'
                   }`}>
                   <div className="flex items-center gap-2 min-w-0">
-                    <img src={l.src} alt="Placed logo" className="w-6 h-6 object-contain rounded bg-[#131317] border border-zinc-800 flex-shrink-0" />
+                    <img src={l.src} alt="Placed logo" className="w-6 h-6 object-contain rounded bg-[#131317] border border-zinc-200 flex-shrink-0" />
                     <div className="min-w-0">
-                      <div className="text-[10px] font-semibold text-zinc-200 truncate">{l.type === 'logo' ? '3D Decal' : 'Flat'} · {l.side}</div>
+                      <div className="text-[10px] font-semibold text-zinc-800 truncate">{l.type === 'logo' ? '3D Decal' : 'Flat'} · {l.side}</div>
                     </div>
                   </div>
                   <div className="flex items-center gap-0.5 flex-shrink-0">
@@ -479,49 +479,49 @@ export default function LogoUploadSettings({
 
       {/* Selected layer controls */}
       {selected && (
-        <div className="space-y-3 bg-[#16161c] rounded-xl p-3 border border-zinc-800">
-          <div className="text-[10px] font-bold uppercase tracking-wider text-indigo-400">Layer Controls</div>
+        <div className="space-y-3 bg-[#e9ede6] rounded-xl p-3 border border-zinc-200">
+          <div className="text-[10px] font-bold uppercase tracking-wider text-blue-700">Layer Controls</div>
 
           <div className="grid grid-cols-2 gap-3">
             {/* Position X */}
             <div className="space-y-1">
-              <div className="flex justify-between text-[9px] text-zinc-450"><span>X Position</span><span className="font-mono font-bold text-zinc-300">{Math.round(selected.x)}</span></div>
-              <input type="range" min="0" max="1024" value={selected.x} onChange={e => onUpdateLogoLayer(selected.id, { x: +e.target.value })} className="w-full accent-indigo-500 h-1.5 bg-zinc-800 rounded-lg appearance-none cursor-pointer" />
+              <div className="flex justify-between text-[9px] text-zinc-450"><span>X Position</span><span className="font-mono font-bold text-zinc-700">{Math.round(selected.x)}</span></div>
+              <input type="range" min="0" max="1024" value={selected.x} onChange={e => onUpdateLogoLayer(selected.id, { x: +e.target.value })} className="w-full accent-blue-500 h-1.5 bg-zinc-200 rounded-lg appearance-none cursor-pointer" />
             </div>
 
             {/* Position Y */}
             <div className="space-y-1">
-              <div className="flex justify-between text-[9px] text-zinc-450"><span>Y Position</span><span className="font-mono font-bold text-zinc-300">{Math.round(selected.y)}</span></div>
-              <input type="range" min="0" max="1024" value={selected.y} onChange={e => onUpdateLogoLayer(selected.id, { y: +e.target.value })} className="w-full accent-indigo-500 h-1.5 bg-zinc-800 rounded-lg appearance-none cursor-pointer" />
+              <div className="flex justify-between text-[9px] text-zinc-450"><span>Y Position</span><span className="font-mono font-bold text-zinc-700">{Math.round(selected.y)}</span></div>
+              <input type="range" min="0" max="1024" value={selected.y} onChange={e => onUpdateLogoLayer(selected.id, { y: +e.target.value })} className="w-full accent-blue-500 h-1.5 bg-zinc-200 rounded-lg appearance-none cursor-pointer" />
             </div>
 
             {/* Scale */}
             <div className="space-y-1">
-              <div className="flex justify-between text-[9px] text-zinc-450"><span>Scale</span><span className="font-mono font-bold text-zinc-300">{selected.scale.toFixed(2)}x</span></div>
-              <input type="range" min="0.1" max="5" step="0.05" value={selected.scale} onChange={e => onUpdateLogoLayer(selected.id, { scale: +e.target.value })} className="w-full accent-indigo-500 h-1.5 bg-zinc-800 rounded-lg appearance-none cursor-pointer" />
+              <div className="flex justify-between text-[9px] text-zinc-450"><span>Scale</span><span className="font-mono font-bold text-zinc-700">{selected.scale.toFixed(2)}x</span></div>
+              <input type="range" min="0.1" max="5" step="0.05" value={selected.scale} onChange={e => onUpdateLogoLayer(selected.id, { scale: +e.target.value })} className="w-full accent-blue-500 h-1.5 bg-zinc-200 rounded-lg appearance-none cursor-pointer" />
             </div>
 
             {/* Rotation */}
             <div className="space-y-1">
-              <div className="flex justify-between text-[9px] text-zinc-450"><span>Rotation</span><span className="font-mono font-bold text-zinc-300">{Math.round(selected.rotation)}°</span></div>
-              <input type="range" min="-180" max="180" value={selected.rotation} onChange={e => onUpdateLogoLayer(selected.id, { rotation: +e.target.value })} className="w-full accent-indigo-500 h-1.5 bg-zinc-800 rounded-lg appearance-none cursor-pointer" />
+              <div className="flex justify-between text-[9px] text-zinc-450"><span>Rotation</span><span className="font-mono font-bold text-zinc-700">{Math.round(selected.rotation)}°</span></div>
+              <input type="range" min="-180" max="180" value={selected.rotation} onChange={e => onUpdateLogoLayer(selected.id, { rotation: +e.target.value })} className="w-full accent-blue-500 h-1.5 bg-zinc-200 rounded-lg appearance-none cursor-pointer" />
             </div>
           </div>
 
           {/* Opacity */}
           <div className="space-y-1">
-            <div className="flex justify-between text-[9px] text-zinc-450"><span>Opacity</span><span className="font-mono font-bold text-zinc-300">{Math.round((selected.opacity ?? 1) * 100)}%</span></div>
-            <input type="range" min="0" max="1" step="0.01" value={selected.opacity ?? 1} onChange={e => onUpdateLogoLayer(selected.id, { opacity: +e.target.value })} className="w-full accent-indigo-500 h-1.5 bg-zinc-800 rounded-lg appearance-none cursor-pointer" />
+            <div className="flex justify-between text-[9px] text-zinc-450"><span>Opacity</span><span className="font-mono font-bold text-zinc-700">{Math.round((selected.opacity ?? 1) * 100)}%</span></div>
+            <input type="range" min="0" max="1" step="0.01" value={selected.opacity ?? 1} onChange={e => onUpdateLogoLayer(selected.id, { opacity: +e.target.value })} className="w-full accent-blue-500 h-1.5 bg-zinc-200 rounded-lg appearance-none cursor-pointer" />
           </div>
         </div>
       )}
 
       {/* Visual Logo Editor Canvas */}
-      <div className="space-y-2 pt-3 border-t border-zinc-800">
-        <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+      <div className="space-y-2 pt-3 border-t border-zinc-200">
+        <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-600">
           Visual Placement Editor ({addSide === 'Front' ? 'Front View' : 'Back View'})
         </div>
-        <div className="relative w-full aspect-square bg-[#16161a] border border-zinc-800 rounded-2xl overflow-hidden flex items-center justify-center pointer-events-auto">
+        <div className="relative w-full aspect-square bg-[#e9ede6] border border-zinc-200 rounded-2xl overflow-hidden flex items-center justify-center pointer-events-auto">
           {/* Silhouette overlay vector path behind transparent Fabric.js layer */}
           <svg
             className="absolute w-4/5 h-4/5 text-zinc-800 pointer-events-none"

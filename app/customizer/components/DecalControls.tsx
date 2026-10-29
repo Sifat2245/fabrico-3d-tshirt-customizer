@@ -38,7 +38,7 @@ interface DecalControlsProps {
 
 export default function DecalControls({ activeDecal, onUpdateDecal }: DecalControlsProps) {
   return (
-    <div className="p-3.5 rounded-xl bg-zinc-50 border border-zinc-200 text-zinc-650 space-y-3 font-sans text-xs">
+    <div className="p-3.5 rounded-xl bg-zinc-50 border border-zinc-200 text-zinc-650 space-y-3 font-body text-xs">
       <div className="flex items-center justify-between text-zinc-800 font-bold uppercase tracking-wider text-[10px]">
         <span className="flex items-center gap-1.5">
           <Sliders className="w-3.5 h-3.5 text-zinc-700" /> Print Controls

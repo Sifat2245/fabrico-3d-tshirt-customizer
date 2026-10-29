@@ -1,17 +1,18 @@
-import { HeroSlider } from "./components/HeroSlider";
-import { FeaturedCategories } from "./components/FeaturedCategories";
-import { FeaturedProducts } from "./components/FeaturedProducts";
-import { PromoBanner } from "./components/PromoBanner";
-import { WhyChooseUs } from "./components/WhyChooseUs";
+import { StudioHero } from "./components/StudioHero";
+import { StudioStory } from "./components/StudioStory";
+import { StudioCollection } from "./components/StudioCollection";
+import { StudioQuestions } from "./components/StudioQuestions";
+import { StudioInvitation } from "./components/StudioInvitation";
+import { LandingMotion } from "./components/LandingMotion";
 
 export default function Home() {
   return (
-    <>
-      <HeroSlider />
-      <FeaturedCategories />
-      <FeaturedProducts />
-      <PromoBanner />
-      <WhyChooseUs />
-    </>
+    <LandingMotion>
+      <StudioHero />
+      <StudioStory />
+      <StudioCollection />
+      <StudioQuestions />
+      <StudioInvitation />
+    </LandingMotion>
   );
 }

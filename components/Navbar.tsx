@@ -1,245 +1,141 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
-import { ShoppingBag, Search, Menu, X, User, Sparkles } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { ArrowUpRight, Menu, ShoppingBag, X } from "lucide-react";
+import { Brand } from "./Brand";
 import { useCart } from "@/lib/cart-context";
-import { SearchOverlay } from "./SearchOverlay";
 
-const NAV_LINKS = [
-  { href: "/", label: "Home" },
-  { href: "/shop", label: "Shop" },
-  { href: "/about", label: "About" },
-] as const;
+const LINKS = [
+  { href: "/#how-it-works", label: "How it works" },
+  { href: "/templates", label: "The collection" },
+  { href: "/about", label: "Our studio" },
+];
 
 export function Navbar() {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const { openSidebar, totalItems } = useCart();
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const menuButton = useRef<HTMLButtonElement>(null);
+  const panel = useRef<HTMLDivElement>(null);
+  const { totalItems, openSidebar } = useCart();
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    if (isMobileOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
+    if (!open) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    panel.current?.querySelector<HTMLAnchorElement>("a")?.focus();
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        menuButton.current?.focus();
+      }
+      if (event.key !== "Tab" || !panel.current) return;
+      const links = panel.current.querySelectorAll<HTMLAnchorElement>("a");
+      const first = links[0],
+        last = links[links.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        menuButton.current?.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        menuButton.current?.focus();
+      } else if (document.activeElement === menuButton.current) {
+        event.preventDefault();
+        (event.shiftKey ? last : first)?.focus();
+      }
     };
-  }, [isMobileOpen]);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
 
   return (
-    <>
-      <motion.header
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled
-            ? "bg-zinc-950/90 backdrop-blur-xl border-b border-zinc-800/60 shadow-sm shadow-black/20"
-            : "bg-transparent"
-        }`}
+    <header className="site-header">
+      <nav
+        className="mx-auto flex h-22 max-w-7xl items-center justify-between gap-6 px-6 lg:px-8"
+        aria-label="Main navigation"
       >
-        <nav
-          className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8"
-          aria-label="Main navigation"
+        <Link
+          href="/"
+          onClick={() => setOpen(false)}
+          className="shrink-0 transition-opacity hover:opacity-70"
         >
-          {/* Logo */}
-          <Link
-            href="/"
-            className="font-display text-2xl font-bold tracking-tight text-zinc-100 transition-opacity hover:opacity-70"
-            aria-label="Fabrico home"
-          >
-            Fabrico
-          </Link>
-
-          {/* Desktop Navigation */}
-          <ul className="hidden items-center gap-8 md:flex" role="list">
-            {NAV_LINKS.map((link) => (
-              <li key={link.href}>
-                <Link
-                  href={link.href}
-                  className="relative text-sm font-medium tracking-wide text-zinc-400 transition-colors hover:text-zinc-100"
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-
-          {/* Desktop Actions */}
-          <div className="hidden items-center gap-3 md:flex">
-            <button
-              type="button"
-              onClick={() => setIsSearchOpen(true)}
-              aria-label="Search products"
-              className="rounded-full p-2 text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-zinc-100"
-            >
-              <Search className="h-5 w-5" />
-            </button>
+          <Brand />
+        </Link>
+        <ul className="hidden items-center gap-8 lg:flex">
+          {LINKS.map((link) => (
+            <li key={link.href}>
+              <Link
+                href={link.href}
+                aria-current={pathname === link.href ? "page" : undefined}
+                className="nav-link"
+              >
+                {link.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <div className="flex items-center gap-3 sm:gap-5">
+          {totalItems > 0 && (
             <button
               type="button"
               onClick={openSidebar}
-              aria-label="Shopping cart"
-              className="relative rounded-full p-2 text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-zinc-100"
+              className="relative rounded-full p-2"
+              aria-label={`Open bag, ${totalItems} items`}
             >
               <ShoppingBag className="h-5 w-5" />
-              {totalItems > 0 && (
-                <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-indigo-500 text-[10px] font-semibold text-white">
-                  {totalItems}
-                </span>
-              )}
+              <span className="cart-count">{totalItems}</span>
             </button>
-            <Link
-              href="/auth/login"
-              aria-label="Account"
-              className="rounded-full p-2 text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-zinc-100"
-            >
-              <User className="h-5 w-5" />
-            </Link>
-
-            {/* ── Start Customizing CTA ── */}
-            <Link
-              href="/customizer"
-              className="group ml-1 inline-flex items-center gap-2 rounded-full bg-indigo-600 px-5 py-2 text-sm font-semibold text-white transition-all hover:bg-indigo-500 hover:shadow-lg hover:shadow-indigo-500/25 active:scale-95"
-            >
-              <Sparkles className="h-4 w-4" />
-              Start Customizing
-            </Link>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            type="button"
-            aria-label={isMobileOpen ? "Close menu" : "Open menu"}
-            aria-expanded={isMobileOpen}
-            className="rounded-full p-2 text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-zinc-100 md:hidden"
-            onClick={() => setIsMobileOpen(!isMobileOpen)}
+          )}
+          <Link
+            href="/customizer"
+            className="studio-button studio-button-dark nav-cta"
           >
-            {isMobileOpen ? (
-              <X className="h-5 w-5" />
-            ) : (
-              <Menu className="h-5 w-5" />
-            )}
+            Open studio <ArrowUpRight className="h-4 w-4" />
+          </Link>
+          <button
+            ref={menuButton}
+            type="button"
+            className="rounded-full p-2 lg:hidden"
+            aria-label={open ? "Close navigation" : "Open navigation"}
+            aria-expanded={open}
+            aria-controls="mobile-navigation"
+            onClick={() => setOpen(!open)}
+          >
+            {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
-        </nav>
-      </motion.header>
-
-      {/* Mobile Drawer */}
-      <AnimatePresence>
-        {isMobileOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
-              onClick={() => setIsMobileOpen(false)}
-              aria-hidden="true"
-            />
-            <motion.div
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="fixed right-0 top-0 z-50 flex h-full w-80 flex-col bg-zinc-950 border-l border-zinc-800 shadow-2xl md:hidden"
+        </div>
+      </nav>
+      {open && (
+        <div
+          ref={panel}
+          id="mobile-navigation"
+          className="mobile-navigation"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Navigation"
+        >
+          <span className="studio-label">A little direction</span>
+          {LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={() => setOpen(false)}
             >
-              <div className="flex items-center justify-between border-b border-zinc-800 px-6 py-4">
-                <span className="font-display text-xl font-bold text-zinc-100">
-                  Fabrico
-                </span>
-                <button
-                  type="button"
-                  aria-label="Close menu"
-                  className="rounded-full p-2 text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-zinc-100"
-                  onClick={() => setIsMobileOpen(false)}
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-
-              <nav className="flex-1 px-6 py-8" aria-label="Mobile navigation">
-                <ul className="flex flex-col gap-1" role="list">
-                  {NAV_LINKS.map((link, index) => (
-                    <motion.li
-                      key={link.href}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.1 + index * 0.05 }}
-                    >
-                      <Link
-                        href={link.href}
-                        className="block rounded-xl px-4 py-3 text-lg font-medium text-zinc-300 transition-colors hover:bg-zinc-800 hover:text-zinc-100"
-                        onClick={() => setIsMobileOpen(false)}
-                      >
-                        {link.label}
-                      </Link>
-                    </motion.li>
-                  ))}
-                </ul>
-              </nav>
-
-              <div className="border-t border-zinc-800 px-6 py-6">
-                <div className="flex flex-col gap-3">
-                  <div className="flex items-center gap-3">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIsMobileOpen(false);
-                        setIsSearchOpen(true);
-                      }}
-                      aria-label="Search products"
-                      className="flex-1 flex items-center justify-center gap-2 rounded-xl border border-zinc-700 px-4 py-3 text-sm font-medium text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-zinc-100"
-                    >
-                      <Search className="h-4 w-4" />
-                      Search
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIsMobileOpen(false);
-                        openSidebar();
-                      }}
-                      aria-label="Shopping cart"
-                      className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-zinc-800 px-4 py-3 text-sm font-medium text-zinc-100 transition-colors hover:bg-zinc-700"
-                    >
-                      <ShoppingBag className="h-4 w-4" />
-                      Cart ({totalItems})
-                    </button>
-                  </div>
-                  <Link
-                    href="/customizer"
-                    onClick={() => setIsMobileOpen(false)}
-                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-indigo-500"
-                  >
-                    <Sparkles className="h-4 w-4" />
-                    Start Customizing
-                  </Link>
-                  <Link
-                    href="/auth/login"
-                    onClick={() => setIsMobileOpen(false)}
-                    className="flex w-full items-center justify-center gap-2 rounded-xl border border-zinc-700 px-4 py-3 text-sm font-medium text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-zinc-100"
-                  >
-                    <User className="h-4 w-4" />
-                    Sign In
-                  </Link>
-                </div>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
-
-      <SearchOverlay isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
-    </>
+              {link.label}
+              <ArrowUpRight className="h-6 w-6" />
+            </Link>
+          ))}
+          <Link href="/customizer" onClick={() => setOpen(false)}>
+            Start creating
+            <ArrowUpRight className="h-6 w-6" />
+          </Link>
+          <p>Your ideas look good on you.</p>
+        </div>
+      )}
+    </header>
   );
 }

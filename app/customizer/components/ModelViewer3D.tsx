@@ -1,14 +1,15 @@
 'use client';
 
 import React, { Suspense, useMemo, useEffect } from 'react';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useThree } from '@react-three/fiber';
+import { useReducedMotion } from 'framer-motion';
 import {
   OrbitControls,
-  Environment,
   ContactShadows,
   useGLTF,
   Html,
   Center,
+  useProgress,
 } from '@react-three/drei';
 import * as THREE from 'three';
 import { CustomizerState } from './types';
@@ -90,10 +91,18 @@ interface JerseyModelProps {
 }
 
 function JerseyModel({ customizerState, shirtColor }: JerseyModelProps) {
+  const invalidate = useThree((state) => state.invalidate);
   const gltf = useGLTF('/models/tshirt2.glb');
   const { frontTex, backTex, trimFrontTex, trimBackTex } = useJerseyTextures(customizerState);
 
-  const clonedScene = useMemo(() => gltf.scene.clone(true), [gltf.scene]);
+  const clonedScene = useMemo(() => {
+    const clone = gltf.scene.clone(true);
+    clone.traverse((child) => {
+      if (!(child instanceof THREE.Mesh)) return;
+      child.material = Array.isArray(child.material) ? child.material.map((material) => material.clone()) : child.material.clone();
+    });
+    return clone;
+  }, [gltf.scene]);
 
   // One-time classification + UV normalization per mesh (pure computation)
   const pieceInfo = useMemo(() => {
@@ -147,14 +156,17 @@ function JerseyModel({ customizerState, shirtColor }: JerseyModelProps) {
         m.needsUpdate = true;
       });
     });
+    invalidate();
 
-    return () => {
-      frontTex?.dispose();
-      backTex?.dispose();
-      trimFrontTex?.dispose();
-      trimBackTex?.dispose();
-    };
-  }, [pieceInfo, shirtColor, frontTex, backTex, trimFrontTex, trimBackTex]);
+  }, [pieceInfo, shirtColor, frontTex, backTex, trimFrontTex, trimBackTex, invalidate]);
+
+  useEffect(() => () => {
+    pieceInfo.forEach(({ mesh, geometry }) => {
+      geometry?.dispose();
+      const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+      materials.forEach((material) => material.dispose());
+    });
+  }, [pieceInfo]);
 
   return (
     <Center>
@@ -163,14 +175,13 @@ function JerseyModel({ customizerState, shirtColor }: JerseyModelProps) {
   );
 }
 
-useGLTF.preload('/models/tshirt2.glb');
-
 function Loader() {
+  const { progress } = useProgress();
   return (
     <Html center>
-      <div className="flex flex-col items-center gap-3 bg-neutral-900/90 text-white px-6 py-4 rounded-2xl backdrop-blur-md shadow-2xl border border-white/10 min-w-[160px]">
-        <div className="w-7 h-7 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-        <span className="text-sm font-medium tracking-wide text-neutral-300">Loading Model...</span>
+      <div role="status" className="flex min-w-44 flex-col items-center gap-3 rounded-2xl border border-[#dbe0d6] bg-[#f8f9f5]/90 px-6 py-4 text-slate-600 backdrop-blur-md">
+        <span className="text-xs font-medium">Preparing your T-shirt</span>
+        <progress value={progress} max={100} aria-label="Loading 3D garment" className="h-1 w-32 accent-blue-600" />
       </div>
     </Html>
   );
@@ -188,22 +199,25 @@ export default function ModelViewer3D({
   shirtColor = '#FFFFFF',
   autoRotate = false,
 }: ModelViewer3DProps) {
+  const reducedMotion = useReducedMotion();
   return (
-    <div className="relative w-full h-full min-h-[500px] select-none">
+    <div className="relative w-full h-full select-none">
       <Canvas
         camera={{ position: [0, 0, 1.8], fov: 45 }}
-        gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+        dpr={[1, 1.5]}
+        frameloop={autoRotate && !reducedMotion ? 'always' : 'demand'}
+        gl={{ antialias: true, alpha: true, powerPreference: 'high-performance', preserveDrawingBuffer: true }}
         shadows
         className="w-full h-full cursor-grab active:cursor-grabbing"
+        aria-label="Your T-shirt in 3D. Drag to rotate and scroll to zoom."
       >
-        <ambientLight intensity={0.7} />
-        <directionalLight position={[5, 8, 5]} intensity={1.2} castShadow shadow-bias={-0.0001} />
-        <directionalLight position={[-5, 3, -5]} intensity={0.4} />
+        <ambientLight intensity={1.5} />
+        <directionalLight position={[5, 8, 5]} intensity={2} castShadow shadow-bias={-0.0001} />
+        <directionalLight position={[-5, 3, -5]} intensity={1.2} />
 
         <Suspense fallback={<Loader />}>
           <JerseyModel customizerState={customizerState} shirtColor={shirtColor} />
-          <Environment preset="city" />
-          <ContactShadows position={[0, -0.6, 0]} opacity={0.5} scale={10} blur={2} far={4} />
+          <ContactShadows position={[0, -0.6, 0]} opacity={0.25} scale={5} blur={2.5} far={3} frames={1} />
         </Suspense>
 
         <OrbitControls
@@ -213,7 +227,7 @@ export default function ModelViewer3D({
           minDistance={1.2}
           maxDistance={5}
           target={[0, 0.05, 0]}
-          autoRotate={autoRotate}
+          autoRotate={autoRotate && !reducedMotion}
           autoRotateSpeed={1.5}
           maxPolarAngle={Math.PI / 2 + 0.3}
         />

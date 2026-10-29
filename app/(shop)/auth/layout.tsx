@@ -1,4 +1,5 @@
-import Link from "next/link";
+import Image from "next/image";
+import { Asterisk } from "lucide-react";
 
 export default function AuthLayout({
   children,
@@ -6,44 +7,32 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen">
-      {/* Left: Branding Panel */}
-      <div className="hidden flex-col justify-between bg-stone-950 p-12 lg:flex lg:w-1/2">
-        <Link
-          href="/"
-          className="font-display text-2xl font-bold tracking-tight text-white"
-        >
-          Fabrico
-        </Link>
-
-        <div className="max-w-md">
-          <h2 className="font-display text-4xl font-bold leading-tight text-white">
-            Style is a way to say who you are{" "}
-            <span className="italic text-stone-400">without speaking.</span>
-          </h2>
-          <p className="mt-6 text-base leading-relaxed text-stone-400">
-            Join thousands of creators designing custom apparel that tells
-            their story.
-          </p>
-        </div>
-
-        <p className="text-xs text-stone-600">
-          &copy; {new Date().getFullYear()} Fabrico. All rights reserved.
+    <div className="grid min-h-[calc(100dvh-88px)] grid-cols-1 lg:grid-cols-2">
+      <div className="relative hidden min-h-160 overflow-hidden bg-accent p-12 text-white lg:block">
+        <p className="studio-label">A space for your ideas</p>
+        <h2 className="relative z-10 mt-10 font-display text-7xl leading-none tracking-tight">
+          YOUR IDEAS
+          <br />
+          LOOK GOOD
+          <br />
+          ON YOU.
+        </h2>
+        <Image
+          src="/images/studio/club.png"
+          alt="An original T-shirt designed in the Fabrico studio"
+          width={700}
+          height={800}
+          className="absolute -bottom-32 -right-16 w-3/4 -rotate-12"
+        />
+        <Asterisk
+          className="absolute right-10 top-12 h-10 w-10 text-blue-200"
+          strokeWidth={1}
+        />
+        <p className="absolute bottom-10 left-12 text-xs text-blue-100">
+          A little imagination. Something entirely yours.
         </p>
       </div>
-
-      {/* Right: Form Panel */}
-      <div className="flex w-full flex-col items-center justify-center px-6 py-12 lg:w-1/2 lg:px-16">
-        {/* Mobile logo */}
-        <div className="mb-12 lg:hidden">
-          <Link
-            href="/"
-            className="font-display text-2xl font-bold tracking-tight text-stone-950"
-          >
-            Fabrico
-          </Link>
-        </div>
-
+      <div className="flex items-center justify-center px-6 py-16 lg:px-16">
         <div className="w-full max-w-sm">{children}</div>
       </div>
     </div>

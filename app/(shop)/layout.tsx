@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { CartSidebar } from "@/components/CartSidebar";
+import "./studio.css";
 
 export default function ShopLayout({
   children,
@@ -10,7 +11,7 @@ export default function ShopLayout({
   return (
     <>
       <Navbar />
-      <main className="flex-1">{children}</main>
+      <main id="main-content" className="flex-1">{children}</main>
       <Footer />
       <CartSidebar />
     </>

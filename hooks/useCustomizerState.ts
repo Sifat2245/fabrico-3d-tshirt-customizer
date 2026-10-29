@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { STUDIO_TEMPLATES } from '@/data/studio';
+import { createStudioPreset } from '@/lib/studio-presets';
 import {
   CustomizerState,
   DEFAULT_STATE,
@@ -13,6 +15,9 @@ type PersistableState = Omit<CustomizerState, 'loadedLogoImages' | 'loadedPatter
 
 function loadFromStorage(): PersistableState {
   if (typeof window === 'undefined') return DEFAULT_STATE;
+  const query = new URLSearchParams(window.location.search);
+  const template = STUDIO_TEMPLATES.find((item) => item.id === query.get('template'));
+  if (template) return createStudioPreset(template.id, query.get('color') ?? undefined);
   try {
     const raw = localStorage.getItem(FABRICO_STORAGE_KEY);
     if (!raw) return DEFAULT_STATE;
@@ -34,17 +39,47 @@ function saveToStorage(state: PersistableState) {
 }
 
 export function useCustomizerState() {
+  const [hydrated, setHydrated] = useState(false);
   const [state, setState] = useState<CustomizerState>(() => ({
-    ...loadFromStorage(),
+    ...DEFAULT_STATE,
     loadedLogoImages: {},
     loadedPatterns: {},
   }));
 
+  useEffect(() => {
+    const restored = loadFromStorage();
+    setState({ ...restored, loadedLogoImages: {}, loadedPatterns: {} });
+    saveToStorage(restored);
+    setHydrated(true);
+    const url = new URL(window.location.href);
+    if (STUDIO_TEMPLATES.some((template) => template.id === url.searchParams.get('template'))) {
+      url.searchParams.delete('template');
+      url.searchParams.delete('color');
+      window.history.replaceState(window.history.state, '', `${url.pathname}${url.search}${url.hash}`);
+    }
+
+    let cancelled = false;
+    const images = restored.logoLayers.map((layer) => ({ src: layer.src, kind: 'loadedLogoImages' as const }));
+    const patterns = [restored.fabricPatternFront, restored.fabricPatternBack]
+      .filter((src) => src && src !== 'None')
+      .map((src) => ({ src, kind: 'loadedPatterns' as const }));
+    [...images, ...patterns].forEach(({ src, kind }) => {
+      const image = new Image();
+      image.crossOrigin = 'anonymous';
+      image.onload = () => {
+        if (!cancelled) setState((previous) => ({ ...previous, [kind]: { ...previous[kind], [src]: image } }));
+      };
+      image.src = src;
+    });
+    return () => { cancelled = true; };
+  }, []);
+
   // Persist on every change (excluding runtime image caches)
   useEffect(() => {
+    if (!hydrated) return;
     const { loadedLogoImages: _a, loadedPatterns: _b, ...rest } = state;
     saveToStorage(rest);
-  }, [state]);
+  }, [state, hydrated]);
 
   const update = useCallback(<K extends keyof CustomizerState>(key: K, value: CustomizerState[K]) => {
     setState((prev) => ({ ...prev, [key]: value }));

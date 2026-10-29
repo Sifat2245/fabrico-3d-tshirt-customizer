@@ -1,16 +1,13 @@
 import type { Metadata } from "next";
-import { playfairDisplay, dmSans } from "@/lib/fonts";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
+import { studioDisplay, studioBody } from "@/lib/fonts";
 import { CartProvider } from "@/lib/cart-context";
-import { CartSidebar } from "@/components/CartSidebar";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Fabrico — Wear Your Identity",
+  title: { default: "Fabrico — Your ideas. Your T-shirt.", template: "%s · Fabrico" },
   description:
-    "Premium clothing e-commerce platform. Browse, customize, and order apparel designed to express your unique style.",
-  keywords: ["clothing", "custom apparel", "fashion", "e-commerce", "premium"],
+    "Your next favorite T-shirt starts with you. Choose your colors, add your artwork, and bring your ideas to life in Fabrico’s live 3D design studio.",
+  keywords: ["T-shirt designer", "3D customization", "custom T-shirt", "design studio"],
 };
 
 export default function RootLayout({
@@ -21,10 +18,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${playfairDisplay.variable} ${dmSans.variable} h-full antialiased`}
+      data-scroll-behavior="smooth"
+      className={`${studioDisplay.variable} ${studioBody.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col font-body" suppressHydrationWarning>
+        <a href="#main-content" className="skip-link">Skip to content</a>
         <CartProvider>
           {children}
         </CartProvider>

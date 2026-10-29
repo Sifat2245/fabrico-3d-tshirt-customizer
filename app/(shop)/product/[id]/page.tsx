@@ -41,26 +41,26 @@ export default async function ProductPage({ params }: ProductPageProps) {
       }}
       default="none"
     >
-      <div className="min-h-screen bg-[#09090b] pt-24">
+      <div className="min-h-screen bg-[#f2f3ef] pt-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           {/* Back Link */}
           <Link
             href="/"
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-zinc-500 transition-colors hover:text-zinc-200"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-zinc-600 transition-colors hover:text-zinc-800"
           >
             <ArrowLeft className="h-4 w-4" />
-            Back to shop
+            Back to the studio
           </Link>
 
           <div className="mt-8 grid grid-cols-1 gap-12 lg:grid-cols-2">
             {/* Product Image */}
-            <div className="relative aspect-[3/4] overflow-hidden rounded-2xl bg-zinc-900 border border-zinc-800">
+            <div className="relative aspect-[3/4] overflow-hidden rounded-2xl bg-zinc-100 border border-zinc-200">
               <ViewTransition
                 name={`product-${product.id}`}
                 share="morph"
               >
-                <div className="flex h-full items-center justify-center bg-gradient-to-br from-zinc-800 to-zinc-900">
-                  <span className="font-display text-9xl font-bold text-zinc-700/40">
+                <div className="flex h-full items-center justify-center bg-gradient-to-br from-zinc-200 to-zinc-100">
+                  <span className="font-display text-9xl font-bold text-zinc-400/40">
                     {product.name.charAt(0)}
                   </span>
                 </div>
