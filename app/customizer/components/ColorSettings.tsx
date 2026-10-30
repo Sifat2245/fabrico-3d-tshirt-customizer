@@ -124,6 +124,7 @@ export default function ColorSettings({ state, onUpdate, onReset }: ColorSetting
       </div>
 
       {/* ── Collar Type ────────────────────────────────────────────────────── */}
+      {state.garment === 'tshirt' && (
       <div className="space-y-2 pt-3 border-t border-[#dbe0d6]">
         <label className="text-[10px] font-bold uppercase tracking-wider text-blue-700">Collar Style</label>
         <div className="grid grid-cols-3 gap-1.5">
@@ -147,6 +148,7 @@ export default function ColorSettings({ state, onUpdate, onReset }: ColorSetting
         )}
       </div>
 
+      )}
       {/* ── Design Color ──────────────────────────────────────────────────── */}
       <div className="space-y-2 pt-3 border-t border-[#dbe0d6]">
         <label className="text-[10px] font-bold uppercase tracking-wider text-blue-700">Pattern / Design Color</label>

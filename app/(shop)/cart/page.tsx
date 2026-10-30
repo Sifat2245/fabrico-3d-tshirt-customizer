@@ -28,13 +28,13 @@ export default function CartPage() {
           Your cart is empty
         </h1>
         <p className="mt-2 text-sm text-zinc-600">
-          Your next favorite T-shirt starts in the studio.
+          Your next favorite piece starts in the studio.
         </p>
         <Link
           href="/customizer"
           className="mt-8 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-500"
         >
-          Design your T-shirt
+          Make something yours
           <ArrowRight className="h-4 w-4" />
         </Link>
       </div>
@@ -85,7 +85,7 @@ export default function CartPage() {
                           ? "/images/studio/original.png"
                           : item.product.image
                       }
-                      alt="Your T-shirt design"
+                      alt={item.product.name}
                       width={96}
                       height={112}
                       className={
@@ -102,8 +102,8 @@ export default function CartPage() {
                       <div>
                         <Link
                           href={
-                            item.product.id.startsWith("custom-tshirt-")
-                              ? "/customizer"
+                            item.product.id.startsWith("custom-")
+                              ? `/customizer?garment=${item.product.garment ?? "tshirt"}`
                               : `/product/${item.product.id}`
                           }
                           className="text-base font-medium text-zinc-800 transition-colors hover:text-zinc-900"

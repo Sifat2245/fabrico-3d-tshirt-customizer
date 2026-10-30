@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { STUDIO_TEMPLATES } from '@/data/studio';
 import { createStudioPreset } from '@/lib/studio-presets';
+import { GARMENTS, isGarmentId, type GarmentId } from '@/data/garments';
 import {
   CustomizerState,
   DEFAULT_STATE,
@@ -13,19 +14,32 @@ import {
 
 type PersistableState = Omit<CustomizerState, 'loadedLogoImages' | 'loadedPatterns'>;
 
+function loadStoredDraft(garment?: GarmentId): PersistableState {
+  const defaults = garment ? { ...DEFAULT_STATE, garment, primary: GARMENTS[garment].color, primaryFront: GARMENTS[garment].color, primaryBack: GARMENTS[garment].color } : DEFAULT_STATE;
+  try {
+    const raw = localStorage.getItem(garment ? `${FABRICO_STORAGE_KEY}_${garment}` : FABRICO_STORAGE_KEY);
+    if (!raw) return defaults;
+    const parsed = JSON.parse(raw) as Partial<PersistableState>;
+    return { ...defaults, ...parsed, garment: garment ?? (isGarmentId(parsed.garment) ? parsed.garment : 'tshirt') };
+  } catch {
+    return defaults;
+  }
+}
+
 function loadFromStorage(): PersistableState {
   if (typeof window === 'undefined') return DEFAULT_STATE;
-  const query = new URLSearchParams(window.location.search);
-  const template = STUDIO_TEMPLATES.find((item) => item.id === query.get('template'));
-  if (template) return createStudioPreset(template.id, query.get('color') ?? undefined);
+  const current = loadStoredDraft();
   try {
-    const raw = localStorage.getItem(FABRICO_STORAGE_KEY);
-    if (!raw) return DEFAULT_STATE;
-    const parsed = JSON.parse(raw) as Partial<PersistableState>;
-    return { ...DEFAULT_STATE, ...parsed };
+    const draftKey = `${FABRICO_STORAGE_KEY}_${current.garment}`;
+    if (!localStorage.getItem(draftKey)) localStorage.setItem(draftKey, JSON.stringify(current));
   } catch {
-    return DEFAULT_STATE;
+    // Restore the current design even when browser storage is unavailable.
   }
+  const query = new URLSearchParams(window.location.search);
+  const requestedGarment = query.get('garment');
+  const garment = isGarmentId(requestedGarment) ? requestedGarment : undefined;
+  const template = STUDIO_TEMPLATES.find((item) => item.id === query.get('template'));
+  return template ? createStudioPreset(template.id, query.get('color') ?? undefined, garment) : garment ? loadStoredDraft(garment) : current;
 }
 
 function saveToStorage(state: PersistableState) {
@@ -33,6 +47,7 @@ function saveToStorage(state: PersistableState) {
   try {
     const { ...toSave } = state;
     localStorage.setItem(FABRICO_STORAGE_KEY, JSON.stringify(toSave));
+    localStorage.setItem(`${FABRICO_STORAGE_KEY}_${state.garment}`, JSON.stringify(toSave));
   } catch {
     // quota exceeded — ignore
   }
@@ -52,15 +67,18 @@ export function useCustomizerState() {
     saveToStorage(restored);
     setHydrated(true);
     const url = new URL(window.location.href);
-    if (STUDIO_TEMPLATES.some((template) => template.id === url.searchParams.get('template'))) {
+    if (STUDIO_TEMPLATES.some((template) => template.id === url.searchParams.get('template')) || isGarmentId(url.searchParams.get('garment'))) {
       url.searchParams.delete('template');
       url.searchParams.delete('color');
+      url.searchParams.delete('garment');
       window.history.replaceState(window.history.state, '', `${url.pathname}${url.search}${url.hash}`);
     }
+  }, []);
 
+  useEffect(() => {
     let cancelled = false;
-    const images = restored.logoLayers.map((layer) => ({ src: layer.src, kind: 'loadedLogoImages' as const }));
-    const patterns = [restored.fabricPatternFront, restored.fabricPatternBack]
+    const images = state.logoLayers.map((layer) => ({ src: layer.src, kind: 'loadedLogoImages' as const }));
+    const patterns = [state.fabricPatternFront, state.fabricPatternBack]
       .filter((src) => src && src !== 'None')
       .map((src) => ({ src, kind: 'loadedPatterns' as const }));
     [...images, ...patterns].forEach(({ src, kind }) => {
@@ -72,7 +90,7 @@ export function useCustomizerState() {
       image.src = src;
     });
     return () => { cancelled = true; };
-  }, []);
+  }, [state.garment, state.logoLayers, state.fabricPatternFront, state.fabricPatternBack]);
 
   // Persist on every change (excluding runtime image caches)
   useEffect(() => {
@@ -87,6 +105,15 @@ export function useCustomizerState() {
 
   const updateMany = useCallback((patch: Partial<CustomizerState>) => {
     setState((prev) => ({ ...prev, ...patch }));
+  }, []);
+
+  const selectGarment = useCallback((garment: GarmentId) => {
+    setState((previous) => {
+      if (previous.garment === garment) return previous;
+      const { loadedLogoImages: _images, loadedPatterns: _patterns, ...draft } = previous;
+      saveToStorage(draft);
+      return { ...loadStoredDraft(garment), loadedLogoImages: {}, loadedPatterns: {} };
+    });
   }, []);
 
   // Image preloading — loads a src into loadedLogoImages cache
@@ -196,20 +223,20 @@ export function useCustomizerState() {
   }, []);
 
   const resetAll = useCallback(() => {
-    setState({
+    setState((previous) => ({
       ...DEFAULT_STATE,
+      garment: previous.garment,
       loadedLogoImages: {},
       loadedPatterns: {},
-    });
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem(FABRICO_STORAGE_KEY);
-    }
+    }));
   }, []);
 
   return {
+    hydrated,
     state,
     update,
     updateMany,
+    selectGarment,
     preloadImage,
     preloadPattern,
     addTextLayer,

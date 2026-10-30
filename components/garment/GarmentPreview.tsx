@@ -4,10 +4,12 @@ import { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import type { StudioTemplateId } from "@/data/studio";
+import { GARMENTS, type GarmentId } from "@/data/garments";
 import { GarmentMesh } from "./GarmentMesh";
 import { GarmentFallback } from "../GarmentFallback";
 
 export interface GarmentPreviewProps {
+  garment?: GarmentId;
   color: string;
   template?: StudioTemplateId;
   showArtwork?: boolean;
@@ -18,6 +20,7 @@ export interface GarmentPreviewProps {
 
 export default function GarmentPreview({
   color,
+  garment = "tshirt",
   template = "original",
   showArtwork = true,
   rotation = -0.3,
@@ -30,7 +33,7 @@ export default function GarmentPreview({
       dpr={[1, 1.5]}
       frameloop="demand"
       gl={{ antialias: true, alpha: true }}
-      aria-label="Interactive 3D preview of your customized T-shirt"
+      aria-label={`Interactive 3D preview of your customized ${GARMENTS[garment].name.toLowerCase()}`}
       className="garment-canvas"
       fallback={<GarmentFallback failed />}
     >
@@ -40,6 +43,7 @@ export default function GarmentPreview({
       <directionalLight position={[1, 3, -4]} intensity={2} />
       <Suspense fallback={null}>
         <GarmentMesh
+          garment={garment}
           color={color}
           template={template}
           showArtwork={showArtwork}

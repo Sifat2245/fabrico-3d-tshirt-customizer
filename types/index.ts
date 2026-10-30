@@ -1,4 +1,7 @@
+import type { GarmentId } from "@/data/garments";
+
 export interface Product {
+  garment?: GarmentId;
   id: string;
   name: string;
   price: number;

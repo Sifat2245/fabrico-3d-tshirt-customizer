@@ -1,8 +1,8 @@
 # Fabrico
 
-**Your ideas. Your T-shirt.**
+**Your ideas. Every layer.**
 
-Fabrico is a web-based T-shirt design studio built with Next.js, React, and Three.js. Visitors can explore an animated 3D landing page, choose a design starting point, customize a garment, and add their design to a browser-persisted shopping bag.
+Fabrico is a web-based T-shirt, hoodie, and cap design studio built with Next.js, React, and Three.js. Visitors can explore an animated 3D landing page, choose a garment and design starting point, customize it, and add their design to a browser-persisted shopping bag.
 
 The experience centers on creating apparel: a live garment preview, tools for colors and artwork, and a workspace that adapts to desktop and mobile screens. The public pages and editor share a cool neutral palette, electric-blue accents, and locally hosted typography.
 
@@ -32,7 +32,8 @@ The experience centers on creating apparel: a live garment preview, tools for co
 
 ### Public experience
 
-- Interactive 3D T-shirt hero with live color selection, an artwork toggle, drag-to-rotate controls, and a button to view the other side.
+- Interactive 3D T-shirt, hoodie, and cap hero with live color selection, an artwork toggle, drag-to-rotate controls, and a button to view the other side.
+- A three-garment lineup and a scroll-animated wardrobe composition using posters rendered from the actual models.
 - GSAP entrance animations, scroll-triggered reveals, and scroll-driven garment rotation in the customization walkthrough.
 - A collection of editable starting points with category filters.
 - Studio introduction, frequently asked questions, shared navigation, and footer.
@@ -47,13 +48,13 @@ The experience centers on creating apparel: a live garment preview, tools for co
 - Text layers with font selection, color, positioning, size, rotation, spacing, curved text, outlines, and shadows.
 - PNG, JPEG, SVG, and WebP image/logo uploads, with placement, scaling, rotation, opacity, and layer controls.
 - A shared layer order used when composing artwork into garment textures.
-- Browser-local design persistence and restoration of image and pattern caches.
+- Separate browser-local drafts for each garment and restoration of image and pattern caches.
 - A desktop settings panel, mobile tool drawers, an order summary, size selection, and quantity controls.
 - Model loading feedback and preview error boundaries.
 
 ### Shopping bag
 
-- Add a customized T-shirt with its selected size, quantity, and calculated price.
+- Add a customized T-shirt, hoodie, or one-size cap with its selected size, quantity, and calculated price.
 - Capture the current 3D viewport as the bag thumbnail, with a garment poster as a fallback.
 - Update quantities, remove items, and clear the bag.
 - Persist bag contents in the current browser.
@@ -207,10 +208,12 @@ Older storefront landing components remain in `app/(shop)/components/`. The acti
 The homepage assembles focused sections in [app/(shop)/page.tsx](<app/(shop)/page.tsx>):
 
 1. `StudioHero` demonstrates garment colors and artwork before opening the editor.
-2. `StudioStory` explains the creation process with a sticky preview and scroll-driven model rotation.
-3. `StudioCollection` displays editable starting points.
-4. `StudioQuestions` answers common questions with native disclosure elements.
-5. `StudioInvitation` provides the final studio entry point.
+2. `StudioCanvases` introduces all three customizable garments.
+3. `StudioStory` explains the creation process with a sticky preview and scroll-driven model rotation.
+4. `StudioSignature` shows a hoodie and cap composition with scroll-driven parallax.
+5. `StudioCollection` displays editable starting points.
+6. `StudioQuestions` answers common questions with native disclosure elements.
+7. `StudioInvitation` provides the final studio entry point.
 
 `LandingMotion` scopes GSAP animation to its component tree and cleans up animation contexts and media-query handlers on unmount. `StudioPreview` waits until its container approaches the viewport before loading the public 3D scene on the client.
 
@@ -234,7 +237,7 @@ On smaller screens, settings and order review open as drawers so the garment kee
 
 The compositor waits for selected text fonts to load and rebuilds the textures when needed. Runtime image caches are reconstructed when a saved design is restored. Textures, cloned geometry, and materials have cleanup paths to release their resources.
 
-The supplied garment has per-piece UV coordinates outside the usual `[0, 1]` range. Both viewers normalize those coordinates before applying design textures. Mesh naming also determines which pieces receive front, back, or trim textures.
+The T-shirt has per-piece UV coordinates outside the usual `[0, 1]` range, normalized before applying design textures. The cap and hoodie use prepared front/back projections with separate fabric UVs. Both viewers share `GarmentModel` and the mesh-role logic in `lib/garment-model.ts`. The text and upload tools show garment-specific placement outlines.
 
 ## Templates and studio links
 
@@ -254,12 +257,14 @@ import { createStudioPreset, studioHref } from "@/lib/studio-presets";
 
 const design = createStudioPreset("club");
 const link = studioHref("original", "#929e83");
-// /customizer?template=original&color=%23929e83
+// /customizer?template=original&garment=tshirt&color=%23929e83
+const hoodieLink = studioHref("original", "#929e83", "hoodie");
+const capDesign = createStudioPreset("club", undefined, "cap");
 ```
 
 The optional color must be a six-digit hex value. Use `studioHref` to encode it correctly; an unescaped `#` in a URL starts a fragment instead of a query value.
 
-Opening a recognized template initializes and saves that starting point, replacing the browser's current design. The template and color query parameters are then removed from the address so refreshing the editor restores subsequent changes. Opening `/customizer` without a template restores the saved design or uses the default white garment.
+Opening a recognized template initializes and saves that starting point for the selected garment. The template, color, and garment query parameters are then removed so refreshing restores subsequent changes. Opening `/customizer?garment=hoodie` or `/customizer?garment=cap` restores that garment's draft. Opening `/customizer` restores the last active garment or uses the default white T-shirt. Older T-shirt drafts without a garment field are supported.
 
 These URLs select initial presets. They do not serialize or share a fully edited design.
 
@@ -272,13 +277,14 @@ Persistence uses `localStorage` and is scoped to the browser and origin.
 | Key | Contents |
 | --- | --- |
 | `fabrico_customizer_v2` | Current design, text/image layers, settings, and layer order |
+| `fabrico_customizer_v2_tshirt`, `_hoodie`, `_cap` | Independent saved drafts for each garment |
 | `fabrico-cart` | Bag items, prices, quantities, selected sizes/colors, and preview images |
 | `fabrico_uploaded_images` | Uploaded image library used by the upload tool |
 | `fabrico_uploaded_patterns` | Uploaded fabric-pattern library |
 
 `loadedLogoImages` and `loadedPatterns` hold runtime `HTMLImageElement` caches and are excluded from the persisted design. Uploaded files and captured previews are represented as data URLs where needed.
 
-There is one current editor design per browser origin. Data is not synchronized across devices or accounts, and clearing site storage removes it. A different protocol, hostname, or port has separate storage. Large uploads and preview images can exhaust browser storage; current save paths catch storage errors without providing a quota-management interface.
+There is one draft per garment per browser origin. Switching garments preserves the other drafts. Data is not synchronized across devices or accounts, and clearing site storage removes it. A different protocol, hostname, or port has separate storage. Large uploads and preview images can exhaust browser storage; current save paths catch storage errors without providing a quota-management interface.
 
 ## 3D models and assets
 
@@ -288,6 +294,10 @@ There is one current editor design per browser origin. Data is not synchronized 
 | --- | --- | --- |
 | `public/models/tshirt2.glb` | 33.1 MB | Full editor garment, including detailed stitching |
 | `public/models/tshirt-preview.glb` | 3.9 MB | Public landing, walkthrough, and studio-introduction previews |
+| `public/models/cap-studio.glb` | 5.7 MB | Cap editor and public preview, prepared from `baseball_cap.glb` |
+| `public/models/hoodie-studio.glb` | 11.5 MB | Hoodie editor and public preview, prepared from `hoodie_black.glb` |
+
+See [garment preparation](docs/garment-models.md) for mesh classification, print UV calculations, material channels, and regeneration with `npm run models:prepare`. Run `npm run models:check` to validate geometry preservation, indices, front/back UV orientation, fabric normal channels, and asset sizes.
 
 The lightweight preview retains selected garment surfaces and the transform hierarchy while omitting dense stitching and duplicate surfaces. The full-resolution editor asset remains available separately.
 
@@ -336,13 +346,13 @@ The current pricing rules are frontend constants, displayed in dollars:
 
 | Rule | Current value | Location |
 | --- | --- | --- |
-| Base custom T-shirt | `$49.00` | `CheckoutSummaryPanel.tsx` |
+| Base custom T-shirt / hoodie / cap | `$49.00` / `$69.99` / `$29.99` | `data/garments.ts` |
 | Added text or image layer | `$5.00` per layer | `CheckoutSummaryPanel.tsx` |
 | Shipping | `$9.99` | `app/(shop)/cart/page.tsx` |
 | Free-shipping threshold | Subtotal strictly greater than `$100.00` | `app/(shop)/cart/page.tsx` |
 
 ```text
-unit price = 49.00 + 5.00 × (text layers + image/logo layers)
+unit price = garment base price + 5.00 × (text layers + image/logo layers)
 subtotal   = unit price × quantity
 bag total = subtotal + shipping
 ```
@@ -391,7 +401,7 @@ npm run start -- --hostname 0.0.0.0 --port 3000
 
 For a managed Next.js deployment, use `npm run build` as the build command and keep the framework's output handling. Static export is not configured in this repository.
 
-Ensure the deployment includes the `public/` assets, especially both GLB files, the collection PNGs, patterns, and fonts. The full editor model is relatively large, so account for its download size and the host's asset limits.
+Ensure the deployment includes the `public/` assets, especially the garment GLBs, collection PNGs, patterns, and fonts. The full T-shirt editor model is relatively large, so account for its download size and the host's asset limits.
 
 No environment secrets are currently required for the frontend. Deployment does not add authentication, order storage, payment processing, or cross-device persistence; those need separate integrations.
 

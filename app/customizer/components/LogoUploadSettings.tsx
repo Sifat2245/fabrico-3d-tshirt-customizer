@@ -3,6 +3,8 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Upload, Trash2, ChevronUp, ChevronDown, Image as ImageIcon, Layers } from 'lucide-react';
 import { LogoLayer, CustomizerState } from './types';
+import { GARMENTS } from '@/data/garments';
+import { PrintAreaGuide } from './PrintAreaGuide';
 
 function genId() { return `logo_${Date.now()}_${Math.random().toString(36).slice(2,6)}`; }
 
@@ -100,7 +102,7 @@ export default function LogoUploadSettings({
       side: side,
       src: selectedUploadedImg,
       x: 512,
-      y: 250,
+      y: state.garment === 'cap' ? 460 : 350,
       scale: 1,
       rotation: 0,
       opacity: 1,
@@ -120,7 +122,7 @@ export default function LogoUploadSettings({
       side: 'Front',
       src: selectedUploadedImg,
       x: 512,
-      y: 250,
+      y: state.garment === 'cap' ? 460 : 350,
       scale: 1,
       rotation: 0,
       opacity: 1,
@@ -133,7 +135,7 @@ export default function LogoUploadSettings({
       side: 'Back',
       src: selectedUploadedImg,
       x: 512,
-      y: 250,
+      y: state.garment === 'cap' ? 460 : 350,
       scale: 1,
       rotation: 0,
       opacity: 1,
@@ -397,7 +399,7 @@ export default function LogoUploadSettings({
 
             {/* Placement target actions */}
             <div className="space-y-1">
-              <span className="text-[9px] text-zinc-500 font-semibold uppercase">Place on Shirt</span>
+              <span className="text-[9px] text-zinc-500 font-semibold uppercase">Place on {GARMENTS[state.garment].name}</span>
               <div className="flex gap-1.5">
                 <button
                   onClick={() => addLayerToSide('Front')}
@@ -523,38 +525,7 @@ export default function LogoUploadSettings({
         </div>
         <div className="relative w-full aspect-square bg-[#e9ede6] border border-zinc-200 rounded-2xl overflow-hidden flex items-center justify-center pointer-events-auto">
           {/* Silhouette overlay vector path behind transparent Fabric.js layer */}
-          <svg
-            className="absolute w-4/5 h-4/5 text-zinc-800 pointer-events-none"
-            viewBox="0 0 100 100"
-            fill="none"
-            stroke="rgba(255, 255, 255, 0.08)"
-            strokeWidth="1.2"
-          >
-            <defs>
-              <pattern id="grid-upload" width="10" height="10" patternUnits="userSpaceOnUse">
-                <path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255, 255, 255, 0.025)" strokeWidth="0.5" />
-              </pattern>
-            </defs>
-            <rect width="100" height="100" fill="url(#grid-upload)" stroke="none" />
-
-            {addSide === 'Front' ? (
-              // Front Collar Outline
-              <path
-                d="M 50,16 C 43.5,16 38.5,10.5 38.5,10.5 H 24 L 6,26 L 19,38 L 29.5,31 V 88 H 70.5 V 31 L 81,38 L 94,26 L 79.5,10.5 H 61.5 C 61.5,10.5 56.5,16 50,16 Z"
-                fill="rgba(255, 255, 255, 0.01)"
-              />
-            ) : (
-              // Back Collar Outline (Higher horizontal ridge at neckline)
-              <path
-                d="M 50,11.5 C 44.5,11.5 38.5,10.5 38.5,10.5 H 24 L 6,26 L 19,38 L 29.5,31 V 88 H 70.5 V 31 L 81,38 L 94,26 L 79.5,10.5 H 61.5 C 61.5,10.5 55.5,11.5 50,11.5 Z"
-                fill="rgba(255, 255, 255, 0.01)"
-              />
-            )}
-
-            {/* Dotted target guide alignment lines */}
-            <line x1="50" y1="10" x2="50" y2="90" stroke="rgba(255, 255, 255, 0.08)" strokeDasharray="2,2" />
-            <line x1="20" y1="50" x2="80" y2="50" stroke="rgba(255, 255, 255, 0.08)" strokeDasharray="2,2" />
-          </svg>
+          <PrintAreaGuide garment={state.garment} side={addSide} />
 
           {/* Fabric canvas element */}
           <div className="absolute z-10 w-[240px] h-[240px]">

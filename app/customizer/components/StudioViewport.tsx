@@ -20,6 +20,7 @@ const ModelViewer3D = dynamic(() => import("./ModelViewer3D"), {
 });
 
 interface StudioViewportProps {
+  ready: boolean;
   state: CustomizerState;
   autoRotate: boolean;
   collapsed: boolean;
@@ -29,6 +30,7 @@ interface StudioViewportProps {
 }
 
 export function StudioViewport({
+  ready,
   state,
   autoRotate,
   collapsed,
@@ -66,12 +68,11 @@ export function StudioViewport({
       <span className="studio-canvas-word" aria-hidden="true">
         YOUR CANVAS.
       </span>
-      <PreviewBoundary>
-        <ModelViewer3D
+      <PreviewBoundary key={state.garment}>
+        {ready ? <ModelViewer3D
           customizerState={state}
-          shirtColor={state.primary}
           autoRotate={autoRotate}
-        />
+        /> : <GarmentFallback />}
       </PreviewBoundary>
       <div className="studio-viewport-bottom">
         <button

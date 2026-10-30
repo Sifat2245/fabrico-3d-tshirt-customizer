@@ -5,6 +5,7 @@ import { ShoppingCart, X, Check, Tag } from 'lucide-react';
 import { CustomizerState } from './types';
 import { useCart } from '@/lib/cart-context';
 import { useRouter } from 'next/navigation';
+import { GARMENTS } from '@/data/garments';
 
 interface CheckoutSummaryPanelProps {
   customizerState: CustomizerState;
@@ -12,9 +13,6 @@ interface CheckoutSummaryPanelProps {
   onQtyChange: (val: number) => void;
   onClose?: () => void;
 }
-
-const AVAILABLE_SIZES = ['S', 'M', 'L', 'XL', 'XXL'] as const;
-type SizeType = (typeof AVAILABLE_SIZES)[number];
 
 export default function CheckoutSummaryPanel({
   customizerState,
@@ -24,9 +22,10 @@ export default function CheckoutSummaryPanel({
 }: CheckoutSummaryPanelProps) {
   const router = useRouter();
   const { addItem, closeSidebar } = useCart();
-  const [selectedSize, setSelectedSize] = useState<SizeType>('M');
+  const garment = GARMENTS[customizerState.garment];
+  const [selectedSize, setSelectedSize] = useState<string>(customizerState.garment === 'cap' ? 'One size' : 'M');
 
-  const BASE_PRICE = 49.0;
+  const BASE_PRICE = garment.price;
   const PRINT_SURCHARGE = 5.0;
 
   const decalsCount = customizerState.textLayers.length + customizerState.logoLayers.length;
@@ -35,7 +34,7 @@ export default function CheckoutSummaryPanel({
   const subtotal = unitPrice * qty;
 
   const handleCheckout = () => {
-    let preview = '/images/studio/original.png';
+    let preview: string = garment.poster;
     try {
       const canvas = document.querySelector<HTMLCanvasElement>('.studio-viewport canvas');
       if (canvas) preview = canvas.toDataURL('image/png');
@@ -44,15 +43,16 @@ export default function CheckoutSummaryPanel({
     }
     const configHash = `${customizerState.primary.replace('#', '')}-${selectedSize}-${decalsCount}`;
     const customProduct = {
-      id: `custom-tshirt-${configHash}-${Date.now()}`,
-      name: 'Customized Premium T-Shirt',
+      garment: garment.id,
+      id: `custom-${garment.id}-${configHash}-${Date.now()}`,
+      name: `Customized ${garment.name}`,
       price: unitPrice,
       category: 'Custom Apparel',
       image: preview,
       customizable: true,
       colors: [customizerState.primary],
-      sizes: [...AVAILABLE_SIZES],
-      description: `Customized Modern T-Shirt. Color: ${customizerState.primary}, Collar: ${customizerState.collarType}, Decals: ${decalsCount} placed.`,
+      sizes: [...garment.sizes],
+      description: `Customized ${garment.name}. Color: ${customizerState.primary}, Decals: ${decalsCount} placed.`,
     };
 
     addItem({
@@ -92,13 +92,13 @@ export default function CheckoutSummaryPanel({
           <div className="space-y-2 bg-[#e9ede6] rounded-xl p-3 border border-[#dbe0d6] text-xs">
             <div className="flex justify-between">
               <span className="text-slate-500 font-medium">Apparel Type</span>
-              <span className="font-semibold text-slate-800">Modern T-Shirt</span>
+              <span className="font-semibold text-slate-800">{garment.name}</span>
             </div>
-            <div className="flex justify-between">
+            {customizerState.garment === 'tshirt' && <div className="flex justify-between">
               <span className="text-slate-500 font-medium">Collar Style</span>
               <span className="font-semibold text-slate-800 capitalize">{customizerState.collarType}</span>
-            </div>
-            {customizerState.zipper && (
+            </div>}
+            {customizerState.garment === 'tshirt' && customizerState.zipper && (
               <div className="flex justify-between">
                 <span className="text-slate-500 font-medium">Zipper Detail</span>
                 <span className="font-semibold text-slate-800">Front Zipper</span>
@@ -176,10 +176,11 @@ export default function CheckoutSummaryPanel({
         {/* Size Selection */}
         <div className="space-y-2">
           <h3 className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Select Size</h3>
-          <div className="grid grid-cols-5 gap-1.5 bg-[#e9ede6] rounded-xl p-2 border border-[#dbe0d6]">
-            {AVAILABLE_SIZES.map((sz) => (
+          <div className={`grid gap-1.5 bg-[#e9ede6] rounded-xl p-2 border border-[#dbe0d6] ${garment.id === 'cap' ? 'grid-cols-1' : 'grid-cols-5'}`}>
+            {garment.sizes.map((sz) => (
               <button
                 key={sz}
+                aria-pressed={selectedSize === sz}
                 onClick={() => setSelectedSize(sz)}
                 className={`py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                   selectedSize === sz
@@ -221,7 +222,7 @@ export default function CheckoutSummaryPanel({
           <h3 className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Pricing</h3>
           <div className="space-y-2 text-xs">
             <div className="flex justify-between">
-              <span className="text-slate-500 font-medium">Base Shirt (Relaxed Fit)</span>
+              <span className="text-slate-500 font-medium">Base {garment.name}</span>
               <span className="text-slate-700 font-semibold">${BASE_PRICE.toFixed(2)}</span>
             </div>
             {decalsCount > 0 && (

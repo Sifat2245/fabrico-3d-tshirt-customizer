@@ -17,7 +17,7 @@ const STEPS = [
   {
     title: "Start with your shade.",
     description:
-      "Go bold. Keep it understated. Find your color and watch your T-shirt change in real time.",
+      "T-shirt, hoodie, or cap. Pick your canvas, find your shade, and watch it change in real time.",
     note: "Your colors. Your starting point.",
     color: "#929e83",
   },

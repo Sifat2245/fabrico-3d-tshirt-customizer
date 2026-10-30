@@ -4,10 +4,10 @@ import { CartProvider } from "@/lib/cart-context";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: { default: "Fabrico — Your ideas. Your T-shirt.", template: "%s · Fabrico" },
+  title: { default: "Fabrico — Your ideas. Every layer.", template: "%s · Fabrico" },
   description:
-    "Your next favorite T-shirt starts with you. Choose your colors, add your artwork, and bring your ideas to life in Fabrico’s live 3D design studio.",
-  keywords: ["T-shirt designer", "3D customization", "custom T-shirt", "design studio"],
+    "Make T-shirts, hoodies, and caps your own. Choose your colors, add your artwork, and bring your ideas to life in Fabrico’s live 3D design studio.",
+  keywords: ["T-shirt designer", "custom hoodie", "custom cap", "3D customization", "design studio"],
 };
 
 export default function RootLayout({

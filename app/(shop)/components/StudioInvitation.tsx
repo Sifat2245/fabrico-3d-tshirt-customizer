@@ -17,7 +17,7 @@ export function StudioInvitation() {
           <h2 id="invitation-title">
             YOUR NEXT
             <br />
-            FAVORITE T-SHIRT.
+            FAVORITE THING.
             <br />
             <span>BY YOU.</span>
           </h2>

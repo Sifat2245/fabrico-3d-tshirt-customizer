@@ -10,6 +10,8 @@ import DesignsSettings from "./DesignsSettings";
 import PatternsSettings from "./PatternsSettings";
 import TextSettings from "./TextSettings";
 import LogoUploadSettings from "./LogoUploadSettings";
+import { GarmentSelector } from "./GarmentSelector";
+import { GARMENTS } from "@/data/garments";
 
 const LABELS: Record<CustomizerTab, { title: string; description: string }> = {
   designs: {
@@ -79,9 +81,10 @@ export function StudioSettings({
         </button>
       </div>
       <div className="studio-settings-content">
+        <GarmentSelector selected={state.garment} onSelect={customizer.selectGarment} />
         <AnimatePresence mode="wait">
           <motion.div
-            key={activeTab}
+            key={`${activeTab}-${state.garment}`}
             initial={{ opacity: 0, y: 5 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
@@ -145,7 +148,7 @@ export function StudioSettings({
                   className="flex items-center gap-2 text-xs text-red-600"
                 >
                   <RotateCcw className="h-4 w-4" />
-                  Reset to a blank T-shirt
+                  Reset to a blank {GARMENTS[state.garment].name.toLowerCase()}
                 </button>
               </div>
             )}

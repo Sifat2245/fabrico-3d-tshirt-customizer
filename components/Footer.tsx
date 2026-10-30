@@ -13,7 +13,7 @@ export function Footer() {
             </Link>
             <p className="mt-4 max-w-xs text-sm text-white/55">
               A space for your ideas.
-              <br />A T-shirt that could only be yours.
+              <br />Every layer, a little more you.
             </p>
           </div>
           <div className="flex gap-12 text-sm sm:gap-20">
@@ -39,7 +39,7 @@ export function Footer() {
         </div>
         <div className="flex flex-col justify-between gap-3 border-t border-white/15 py-6 text-xs text-white/45 sm:flex-row">
           <p>© {new Date().getFullYear()} Fabrico. Make something personal.</p>
-          <p>From a blank canvas to your favorite T-shirt.</p>
+          <p>T-shirts. Hoodies. Caps. Made personal.</p>
         </div>
       </div>
     </footer>

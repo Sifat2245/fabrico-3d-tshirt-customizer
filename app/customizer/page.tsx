@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight, Check, ShoppingBag } from "lucide-react";
 import { Brand } from "@/components/Brand";
+import { GARMENTS } from "@/data/garments";
 import { StudioViewport } from "./components/StudioViewport";
 import { useCustomizerState } from "@/hooks/useCustomizerState";
 import SettingsIconSidebar, {
@@ -98,7 +99,7 @@ export default function CustomizerPage() {
           <span className="studio-app-name">Design studio</span>
         </div>
         <div className="studio-save-status">
-          <span className="studio-file-name">Your original T-shirt</span>
+          <span className="studio-file-name">Your original {GARMENTS[state.garment].name.toLowerCase()}</span>
           <span className="flex items-center gap-1.5">
             <Check className="h-3 w-3" /> Saved to this browser
           </span>
@@ -137,6 +138,7 @@ export default function CustomizerPage() {
           />
         </aside>
         <StudioViewport
+          ready={customizer.hydrated}
           state={state}
           autoRotate={autoRotate}
           collapsed={collapsed}
@@ -159,6 +161,7 @@ export default function CustomizerPage() {
           aria-label="Review your design"
         >
           <CheckoutSummaryPanel
+            key={state.garment}
             customizerState={state}
             qty={quantity}
             onQtyChange={setQuantity}

@@ -116,7 +116,7 @@ export function ProductDetails({
         </button>
         {product.customizable && (
           <Link
-            href={`/customizer?product=${product.id}`}
+            href={`/customizer?garment=${product.garment ?? "tshirt"}`}
             className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-4 text-sm font-semibold text-white transition-all hover:bg-blue-500 hover:shadow-lg hover:shadow-blue-500/20"
           >
             <Palette className="h-4 w-4" />

@@ -13,11 +13,14 @@ import {
 import { StudioPreview } from "@/components/StudioPreview";
 import { STUDIO_COLORS } from "@/data/studio";
 import { studioHref } from "@/lib/studio-presets";
+import { GARMENT_LIST, GARMENTS, type GarmentId } from "@/data/garments";
 
 export function StudioHero() {
   const [colorIndex, setColorIndex] = useState(0);
   const [artwork, setArtwork] = useState(true);
   const [rotation, setRotation] = useState(-0.3);
+  const [garmentId, setGarmentId] = useState<GarmentId>("tshirt");
+  const garment = GARMENTS[garmentId];
   const color = STUDIO_COLORS[colorIndex];
 
   return (
@@ -28,7 +31,7 @@ export function StudioHero() {
       <div className="hero-layout mx-auto max-w-7xl px-6 lg:px-8">
         <div className="hero-copy">
           <p data-hero-reveal className="studio-label flex items-center gap-2">
-            <span className="status-dot" /> The 3D T-shirt design studio
+            <span className="status-dot" /> Your 3D apparel design studio
           </p>
           <h1 id="hero-title" className="hero-heading">
             <span data-hero-reveal>DON’T JUST</span>
@@ -37,18 +40,26 @@ export function StudioHero() {
               MAKE IT.
             </span>
           </h1>
+          <div data-hero-reveal className="mb-5 flex gap-2" role="group" aria-label="Choose a garment to preview">
+            {GARMENT_LIST.map((item) => (
+              <button key={item.id} type="button" aria-pressed={item.id === garmentId}
+                onClick={() => { setGarmentId(item.id); setRotation(-0.3); }}
+                className={`rounded-full px-4 py-2 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${item.id === garmentId ? "bg-[#26322a] text-white" : "bg-[#e5e8df] text-[#59615a] hover:bg-[#dbe0d6]"}`}
+              >{item.name}</button>
+            ))}
+          </div>
           <p data-hero-reveal className="hero-description">
-            A blank T-shirt. A head full of ideas.
+            T-shirts. Hoodies. Caps. A head full of ideas.
             <br />
             Turn your colors, words, and artwork into something you can actually
             wear.
           </p>
           <div data-hero-reveal className="flex flex-wrap items-center gap-5">
             <Link
-              href={studioHref(artwork ? "original" : "blank", color.hex)}
+              href={studioHref(artwork ? "original" : "blank", color.hex, garmentId)}
               className="studio-button studio-button-blue"
             >
-              Design your T-shirt <ArrowUpRight className="h-5 w-5" />
+              Design your {garment.name.toLowerCase()} <ArrowUpRight className="h-5 w-5" />
             </Link>
             <a href="#how-it-works" className="hero-secondary-link">
               See how it works <ArrowRight className="h-4 w-4" />
@@ -74,10 +85,11 @@ export function StudioHero() {
           </div>
           <div className="hero-orbit" aria-hidden="true" />
           <span className="hero-coordinate studio-label" aria-hidden="true">
-            F / 001
+            F / 0{garment.number}
           </span>
           <div className="hero-model">
             <StudioPreview
+              garment={garmentId}
               color={color.hex}
               showArtwork={artwork}
               rotation={rotation}
@@ -91,7 +103,7 @@ export function StudioHero() {
           <button
             type="button"
             className="hero-rotate"
-            aria-label="Rotate T-shirt to the other side"
+            aria-label={`Rotate ${garment.name.toLowerCase()} to the other side`}
             onClick={() => setRotation((value) => value + Math.PI)}
           >
             <RotateCcw className="h-4 w-4" />
@@ -108,7 +120,7 @@ export function StudioHero() {
               <div
                 className="flex gap-2"
                 role="group"
-                aria-label="Preview T-shirt color"
+                aria-label={`Preview ${garment.name.toLowerCase()} color`}
               >
                 {STUDIO_COLORS.map((swatch, index) => (
                   <button
@@ -138,7 +150,7 @@ export function StudioHero() {
             </div>
           </div>
           <p className="hero-drag-hint studio-label">
-            Drag the T-shirt. Try a color. Make it yours.
+            Drag the {garment.name.toLowerCase()}. Try a color. Make it yours.
           </p>
         </div>
       </div>

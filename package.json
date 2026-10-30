@@ -3,15 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "bun --bun next dev",
+    "build": "bun --bun next build",
+    "start": "bun --bun next start",
+    "models:prepare": "node scripts/prepare-garments.mjs",
+    "models:check": "node scripts/check-garments.mjs",
     "lint": "eslint"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.6.1",
+    "bun": "^1.4.4",
     "clsx": "^2.1.1",
     "fabric": "^7.4.0",
     "framer-motion": "^12.42.2",

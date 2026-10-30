@@ -4,12 +4,12 @@ const QUESTIONS = [
   {
     question: "Do I need to know how to design?",
     answer:
-      "Just bring an idea. Start with a blank T-shirt or choose a design from the collection. Pick colors, add text, and upload your artwork using the studio’s simple tools. You can see every change on the 3D T-shirt as you work.",
+      "Just bring an idea. Start with a T-shirt, hoodie, or cap and choose a blank canvas or a design from the collection. Pick colors, add text, and upload your artwork. You can see every change on your 3D garment as you work.",
   },
   {
     question: "What can I customize?",
     answer:
-      "Make the front and back your own with colors, design patterns, fabric patterns, text, and uploaded images. Adjust the size, position, and rotation of your artwork, and organize your design with layers.",
+      "Customize a T-shirt, hoodie, or cap. Add colors, patterns, text, and uploaded images to the T-shirt’s front and back, the hoodie’s torso, or the cap’s crown. Adjust artwork size, position, rotation, and layers in the same studio.",
   },
   {
     question: "Can I use my own logo or artwork?",
@@ -19,12 +19,12 @@ const QUESTIONS = [
   {
     question: "Will I lose my design if I leave?",
     answer:
-      "Your work is saved automatically in this browser as you design. Return to the studio on the same device and browser to pick up where you left off. Clearing your browser’s site data will remove the saved design.",
+      "Each garment keeps its own draft, saved automatically in this browser. Switch between your tee, hoodie, and cap without losing your work. Return on the same device and browser to continue. Clearing your browser’s site data removes saved drafts.",
   },
   {
-    question: "How do I order my T-shirt?",
+    question: "How do I order my design?",
     answer:
-      "When your design feels right, open the order summary in the studio, choose your size and quantity, and add it to your bag. Review your design details and total before continuing.",
+      "When your design feels right, select Review design in the studio. Choose your size and quantity, then add it to your bag. T-shirts and hoodies have clothing sizes; the cap comes in one size. Review your details and total before continuing.",
   },
 ];
 

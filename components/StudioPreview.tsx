@@ -32,7 +32,7 @@ export function StudioPreview(props: GarmentPreviewProps) {
 
   return (
     <div ref={container} className="h-full w-full">
-      <PreviewBoundary>
+      <PreviewBoundary key={props.garment}>
         {ready ? <GarmentPreview {...props} /> : <GarmentFallback />}
       </PreviewBoundary>
     </div>

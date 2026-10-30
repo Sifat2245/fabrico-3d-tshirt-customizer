@@ -1,5 +1,7 @@
 'use client';
 
+import type { GarmentId } from '@/data/garments';
+
 // ─── Core Layer Types ─────────────────────────────────────────────────────────
 
 export interface EraserPath {
@@ -50,6 +52,7 @@ export interface LogoLayer {
 // ─── Main Customizer State ────────────────────────────────────────────────────
 
 export interface CustomizerState {
+  garment: GarmentId;
   // Colors
   primary: string;
   secondary: string;
@@ -92,6 +95,7 @@ export interface CustomizerState {
 }
 
 export const DEFAULT_STATE: Omit<CustomizerState, 'loadedLogoImages' | 'loadedPatterns'> = {
+  garment: 'tshirt',
   primary: '#FFFFFF',
   secondary: '#1A1A2E',
   designColor: '#1A1A2E',
